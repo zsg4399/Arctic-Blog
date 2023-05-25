@@ -1,0 +1,243 @@
+.indexContainer {
+  width: 100%;
+}
+
+.item:hover{
+  cursor: pointer;
+}
+.headContainer {
+  min-height: 72px;
+  padding-left: 25px;
+  padding-right: 10px;
+  display: flex;
+  align-items: center;
+  box-sizing: border-box;
+  background: linear-gradient(130deg, rgb(36, 198, 220), rgb(84, 51, 255) 41.07%, rgb(255, 0, 153) 76.05%);
+  color-scheme: light;
+}
+.navlinknone {
+  text-decoration: none;
+  color: #3c3f41;
+  font-size: 24px;
+  font-weight: 500;
+}
+.footContainer {
+  width: 100%;
+  height: 10%;
+  box-sizing: border-box;
+  color: #99979c;
+  background-color: #1c1f21;
+  font-size: 18px;
+  font-weight: 500;
+  line-height: 28px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.mainContainer {
+  width: 100%;
+  box-sizing: border-box;
+  min-height: 640px;
+  padding-left: 15px;
+  padding-right: 15px;
+  margin-left: auto;
+  margin-right: auto;
+  box-sizing: border-box;
+  justify-content: center;
+  background: linear-gradient(130deg, rgb(36, 198, 220)15.56%, rgb(84, 51, 255) 41.07%, rgb(255, 0, 153) 76.05%);
+}
+
+.mainContent {
+  width: 1140px;
+  box-sizing: border-box;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+.registerCard {
+  height: 520px;
+  width: 474px;
+  margin-top: 30px;
+  margin-bottom: 50px;
+  box-sizing: border-box;
+
+  border: 1px solid rgba(0, 0, 0, 0.125);
+  border-radius: 10px;
+  background-color: #fff;
+}
+
+.cardHeader {
+  padding-top: 5px;
+  height: 48px;
+  width: 474px;
+  box-sizing: border-box;
+}
+.hrStyle {
+  width: 434px;
+  height: 1px;
+  opacity: 30%;
+  margin-left: 20px;
+  margin-right: 20px;
+  color: #987cb9;
+}
+
+.headerfont {
+  width: 80px;
+  margin: 0 auto;
+  color: #17a2b8;
+  font-size: 1.5rem;
+  font-weight: 400;
+}
+.cardMain {
+  margin-top: 30px;
+  width: 474px;
+  height: 400px;
+}
+.loginCard {
+  @extend .registerCard;
+  margin-top: 130px;
+  height: 420px;
+}
+
+.HomePageContainer {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 65% 35%;
+}
+
+.leftContainer {
+  width: 760px;
+  padding-left: 15px;
+  padding-right: 15px;
+  box-sizing: border-box;
+}
+.rightContainer{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+  padding: 10px;
+  padding-top: 20px;
+}
+.swipper {
+  margin-top: 5px;
+  width: 726px;
+  height: 363px;
+  box-sizing: border-box;
+  border-radius: 5px;
+  border: 1px solid aqua;
+}
+
+.tableHeader {
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.headerFont {
+  width: 80px;
+  height: 100%;
+  padding: 5px;
+  box-sizing: border-box;
+}
+
+.tableContainer {
+  width: 100%;
+}
+
+.tableItem {
+  height: 230px;
+  display: flex;
+  box-sizing: border-box;
+  background-color: #fff;
+  padding: 8px;
+}
+
+.ImageStyle {
+  width: 180px;
+  height: 160px;
+  margin-top: 25px;
+  margin-bottom: 25px;
+  margin-left: 10px;
+}
+
+.profilePhoto {
+  border-radius: 50%;
+  height: 24px;
+  width: 24px;
+}
+
+.tableItemMaincontent {
+  width: 100%;
+  margin-left: 15px;
+  margin-top: 20px;
+  box-sizing: border-box;
+}
+
+//文章标题样式
+.articleTitle {
+  @extend .item:hover;
+  font-size: 18px;
+  font-weight: 500;
+  height: 30px;
+  color: #222226;
+  overflow: hidden;
+  word-break: break-word;
+  .titleContainer{
+    width: 375px;
+    height: 100%;
+    line-height: 30px;
+    display: inline-block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+}
+
+.ContentHeader{
+  width: 100%;
+  box-sizing: border-box;
+  height: 30px;
+}
+//文章摘要样式
+.SummaryContainer {
+  @extend .item:hover;
+  color: #555666;
+  margin-top: 8px;
+  line-height: 24px;
+  overflow: hidden;
+  white-space: normal;
+  word-break: break-word;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  width: 100%;
+  height: 72px;
+  box-sizing: border-box;
+}
+
+.logoAndFont{
+  color: rgb(157, 157, 157);
+  margin-right: 5px;
+}
+.contentFooter {
+  box-sizing: border-box;
+  width: 100%;
+  height: 30px;
+  display: flex;
+  margin-top: 35px;
+}
+
+.highlightLike{
+  font-size: 150%;
+  color: rgb(252, 85, 49);
+}
+
+.paginationStyle{
+  color: rgb(33,33,33);
+  font-size: 18px;
+  font-weight: 500;
+  margin-top: 10px;
+  margin-bottom: 5px;
+}

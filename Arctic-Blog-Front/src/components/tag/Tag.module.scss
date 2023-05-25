@@ -1,0 +1,40 @@
+.tagContainer{
+  max-width: 105px;
+  height: 25px;
+  box-sizing: border-box;
+}
+
+.changeinputContainer{
+  max-width: 120px;
+  height: 25px;
+  box-sizing: border-box;
+}
+
+.tagSelectorContainer{
+  width: 90%;
+  box-sizing: border-box;
+  margin-left: 5%;
+  margin-right: 5%;
+}
+
+.leftmenuContainer{
+  height: 260px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  border-right: 2px solid #f5f5f5;
+  box-sizing: border-box ;
+}
+
+.rightTagsContainer{
+  display: flex;
+  flex-flow: row wrap;
+  box-sizing: border-box;
+}
+
+.selectTag{
+  margin: 5px;
+  border-radius: 5px;
+  box-sizing: border-box;
+  background-color: #add8e6;
+  color: #51808f;
+}

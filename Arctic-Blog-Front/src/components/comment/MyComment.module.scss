@@ -1,0 +1,77 @@
+.h3Style {
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-size: 24px;
+}
+
+.AddCommentArea {
+  box-sizing: border-box;
+  background-color: rgb(26, 26, 26);
+  color: #bebebe;
+  width: 100%;
+  font-size: 16px;
+}
+.AddButton {
+  background: linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%);
+  height: 2.5rem;
+  width: 9rem;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 10px;
+  position: relative;
+  top: 10px;
+  left: 78%;
+}
+
+.commentMain{
+  color: #bebebe;
+  font-size: 16px;
+}
+
+.LikeContainer{
+  color: #fff !important;
+}
+
+.loader{
+  padding: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+.authorName{
+  color: #bebebe;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.replyArea{
+  margin-left: 10px;
+  margin-right: 10px;
+  box-sizing: border-box;
+  background-color: rgb(26, 26, 26);
+  color: #bebebe;
+  width: 80%;
+  font-size: 16px;
+}
+
+.replyContainer{
+  width: 100%;
+  box-sizing: border-box;
+  height: 7rem;
+  display: flex;
+}
+
+.replyButton{
+  background: linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%);
+  height: 2.5rem;
+  width: 4rem;
+  color: #fff;
+  font-weight: 500;
+  border-radius: 10px;
+  margin-top: auto;
+  margin-bottom: auto;
+}
+
+.commentContent{
+  letter-spacing: 1px;
+}

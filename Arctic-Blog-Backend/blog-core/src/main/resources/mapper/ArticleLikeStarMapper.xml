@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnust.zsg.mapper.ArticleLikeStarMapper">
+
+    <select id="getIdByArticleIdAndUserId" resultType="Long">
+        select id from article_like_star where articleId=#{articleId} and userId=#{userId}
+    </select>
+
+    <insert id="insertOrUpdate" parameterType="ArticleLikeStarPO">
+        <if test="id!=null">
+            update article_like_star set
+            <if test="isLike!=null">isLike=#{isLike},</if>
+            <if test="isStar!=null">isStar=#{isStar},</if>
+            updateTime=#{updateTime}
+            where id=#{id}
+
+        </if>
+        <if test="id==null">
+            insert into article_like_star(articleId,userId,<if test="isLike!=null">isLike,</if><if test="isStar!=null">isStar,</if> createTime,updateTime) value
+            (#{articleId},#{userId},<if test="isLike!=null">#{isLike},</if> <if test="isStar!=null"> #{isStar},</if>#{createTime},#{updateTime})
+        </if>
+
+    </insert>
+</mapper>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnust.zsg.mapper.UserMapper">
+    <select id="haveUsername" resultType="String">
+        select username
+        from user
+        where username = #{username}
+    </select>
+
+    <select id="haveEmail" resultType="String">
+        select email
+        from user
+        where email = #{email}
+    </select>
+
+    <insert id="registerUser" parameterType="UserPO">
+        insert into user(username, email, password, createTime, updateTime, avatar, sex) value (#{username},#{email},#{password},#{createTime},#{updateTime},#{avatar},#{sex})
+    </insert>
+
+    <select id="getUserByUsername" resultType="UserPO">
+        select id, username, password, enabled
+        from user
+        where username = #{username}
+    </select>
+    <select id="getUserByEmail" resultType="UserPO">
+        select id, username, password, enabled
+        from user
+        where email = #{email}
+    </select>
+
+    <select id="getUsernameById" resultType="String">
+        select username
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="getRolesByUserId" resultType="String">
+        select role
+        from user_role
+        where userId = #{userId}
+    </select>
+
+    <select id="getUserById" resultType="UserVO">
+        select id, username, avatar
+        from user
+        where id = #{id}
+    </select>
+
+    <select id="getBasicUserinfoById" resultType="UserPO">
+        select username,
+               avatar,
+               enabled,
+               sex,
+               birthday,
+               address,
+               description,
+               phone
+        from user
+        where id = #{id}
+    </select>
+
+    <update id="updateUsernameById">
+        update user
+        set username=#{username}
+        where id = #{id}
+    </update>
+
+    <update id="updateAddressById">
+        update user
+        set address=#{address}
+        where id = #{id}
+    </update>
+    <update id="updateBirthdayById">
+        update user
+        set birthday=#{birthday}
+        where id = #{id}
+    </update>
+    <update id="updateSexById">
+        update user
+        set sex=#{sex}
+        where id = #{id}
+    </update>
+    <update id="updateDescriptionById">
+        update user
+        set description=#{description}
+        where id = #{id}
+    </update>
+
+
+
+</mapper>

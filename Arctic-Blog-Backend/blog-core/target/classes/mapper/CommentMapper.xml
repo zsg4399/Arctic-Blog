@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnust.zsg.mapper.CommentMapper">
+    <select id="getCommentAmountByArticleId" resultType="Long">
+        select count(*)
+        from comment,
+             article_comment
+        where commentId = article_comment.id
+          and articleId = #{id}
+    </select>
+
+    <insert id="addAboutComment">
+        insert into about_comment(id) value (#{id})
+    </insert>
+
+    <insert id="addComment" useGeneratedKeys="true" keyProperty="id" keyColumn="id" parameterType="CommentPO">
+        insert into comment(userId, createTime, content) value (#{userId},#{createTime},#{content})
+    </insert>
+
+    <insert id="addArticleComment">
+        insert into article_comment(articleId, commentId) value (#{articleId},#{commentId})
+    </insert>
+
+    <insert id="addTalkComment">
+        insert into talk_comment(talkId, commentId) value (#{talkId},#{commentId})
+    </insert>
+
+    <select id="getAboutComment" resultType="CommentPO">
+        SELECT `comment`.id,
+               `comment`.userId,
+               `comment`.createTime,
+               `comment`.commentLikes,
+               `comment`.content
+        FROM about_comment,
+             `comment`
+        WHERE `comment`.pid = 0
+          and about_comment.id = `comment`.id
+    </select>
+
+    <select id="getArticleComment" resultType="CommentPO">
+        select `comment`.id,
+               `comment`.userId,
+               `comment`.createTime,
+               `comment`.commentLikes,
+               `comment`.content
+        from article_comment,
+             `comment`
+        where articleId=#{articleId} and `comment`.pid=0 and commentId=`comment`.id
+    </select>
+
+    <select id="getReplyByPid" resultType="CommentPO">
+        select id,
+               userId,
+               createTime,
+               CommentLikes,
+               content,
+               replyUid
+        from comment
+        where pid = #{pid}
+    </select>
+
+    <insert id="addCommentReply" parameterType="CommentPO">
+        insert into comment(content,createTime,userId,pid<if test="replyUid!=null">,replyUid</if>)
+        value(#{content},#{createTime},#{userId},#{pid}<if
+            test="replyUid!=null">,#{replyUid}</if>)
+    </insert>
+</mapper>

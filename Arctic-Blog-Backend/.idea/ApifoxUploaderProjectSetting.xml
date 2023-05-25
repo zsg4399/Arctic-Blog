@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ApifoxUploaderProjectSetting">
+    <option name="apifoxAccessToken" value="APS-entH3oToAG4oa5blOI5W3Ug4dHytBS23" />
+    <option name="apifoxApiOverwriteMode" value="覆盖所有字段" />
+    <option name="apifoxProjectIds">
+      <array>
+        <option value="# ModuleName:ProjectID" />
+        <option value="blog-core:2611383" />
+        <option value="" />
+      </array>
+    </option>
+    <option name="apifoxSyncFolder" value="true" />
+    <option name="yapiTokens" value="" />
+  </component>
+</project>

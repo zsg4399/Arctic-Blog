@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnust.zsg.mapper.ArticleMapper">
+    <select id="getAllArticleId" resultType="Long">
+        select id
+        from article
+        order by #{order} desc
+    </select>
+
+    <insert id="addArticle" parameterType="ArticlePO">
+
+        insert into article(title, imageUrl, authorId, summary, deleteUrl, createTime, updateTime) value (#{title},#{imageUrl},#{authorId},#{summary},#{deleteUrl},#{createTime},#{updateTime})
+    </insert>
+
+    <select id="getDeleteUrlById" resultType="String">
+        select deleteUrl
+        from article
+        where id = #{id}
+    </select>
+
+    <select id="getArticleById" resultType="ArticlePO">
+        select id,
+               title,
+               imageUrl,
+               summary,
+               authorId,
+               createTime,
+               updateTime,
+               articleStars,
+               articleLikes,
+               articleViews
+        from article
+        where id = #{id}
+    </select>
+
+    <select id="getSwipperPicture" resultType="SwiperVO">
+        select imageUrl,id from article order by articleViews limit 4
+    </select>
+
+
+</mapper>

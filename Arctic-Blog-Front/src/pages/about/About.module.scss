@@ -1,0 +1,71 @@
+.aboutContainer {
+  width: 100%;
+  min-height: 100vh;
+  padding: 10px;
+  box-sizing: border-box;
+}
+.HeadFont {
+  width: 100%;
+  min-height: 72px;
+  font-size: 32px;
+  font-weight: 700;
+}
+.mainGrid {
+  width: 100%;
+  display: grid;
+  grid-template-columns: 65% 35%;
+  box-sizing: border-box;
+  .showDetail {
+    width: 100%;
+    min-height: 496px;
+    background-color: #212121;
+    padding: 56px;
+    border-radius: 10px;
+    letter-spacing: 0.75px;
+    color: #bebebe;
+    font-weight: 500;
+  }
+}
+
+
+.h3Title{
+  color: rgb(255, 255, 255);
+  font-weight: 600;
+  font-size: 24px;
+}
+.commonLine{
+  height: 24px;
+  line-height: 24px;
+  display: flex;
+  align-items: center;
+}
+.description{
+  line-height: 24px;
+  font-size: 16px;
+  font-weight: 600;
+  word-wrap: break-word;
+  letter-spacing: 1px;
+}
+.leftGrid{
+  width: 100%;
+}
+.Comments{
+  background-color: rgb(33, 33, 33);
+  margin-top: 20px;
+  width: 100%;
+  padding-left: 2rem;
+  padding-right: 2rem;
+  padding-top: 2rem;
+  padding-bottom: 2rem;
+  box-sizing: border-box;
+  border-radius: 10px;
+}
+
+.col1{
+  height: 100%;
+  width: 100%;
+  display: flex;
+  box-sizing: border-box;
+  justify-content: center;
+}
+

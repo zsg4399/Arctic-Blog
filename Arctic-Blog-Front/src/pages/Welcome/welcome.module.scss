@@ -1,0 +1,77 @@
+.welContainer {
+  height: 100%;
+  background-image: url("../../static/welcomebcg.png");
+  background-size: cover;
+  text-align: center;
+  display: flex;
+  justify-content: center;
+}
+.Container {
+  width: 400px;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.profilephotoContainer {
+  padding-top: 150px;
+  box-sizing: border-box;
+}
+.profilephoto {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+}
+.h1Style {
+  color: #fff;
+  font-family: Arial, Helvetica, sans-serif;
+  font-weight: 800;
+  margin: 10px;
+}
+.h2Style {
+  color: #FF6EC7;
+  font-weight: 900;
+}
+.h3Style {
+  margin: 5px;
+  color: #fff;
+  font-size: 14px;
+  font-weight: 300;
+}
+.hrStyle {
+  border: 1px solid #fff;
+  width: 250px;
+  margin: 0;
+  padding: 0;
+}
+
+.selectContainer {
+  width: 350px;
+  font-size: 14px;
+  color: #330033;
+  display: flex;
+  justify-content: space-between;
+}
+
+.selectTitle {
+  cursor: pointer;
+  font-size: 16px;
+  font-weight: 600;
+  background: linear-gradient(
+    130deg,
+    rgb(36, 198, 220) 15.56%,
+    rgb(84, 51, 255) 41.07%,
+    rgb(255, 0, 153) 76.05%
+  );
+  color:  #fff;
+  text-shadow: 0px 0px 15px #00ffff, 0px 0px 15px #00ffff, 0px 0px 15px #00ffff;
+  border-radius: 5px;
+  padding-left: 10px;
+  padding-right: 10px;
+  box-sizing: border-box;
+  margin-right: 3px;
+}
+
+.selectTitle:hover{
+  color:  #4D4DFF;
+}

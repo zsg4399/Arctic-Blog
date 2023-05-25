@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.hnust.zsg.mapper.CategoryMapper">
+    <select id="getAllCategoryByUserId" resultType="CategoryPO">
+        SELECT category.categoryName,
+               category.categoryImg
+        FROM `category`
+        WHERE category.userId = #{id}
+
+    </select>
+
+    <select id="searchCategoryIsExist" resultType="Long">
+        select id
+        from category
+        where categoryName = #{categoryName}
+          and userId = #{userId}
+    </select>
+
+    <insert id="insertCategory" useGeneratedKeys="true" keyProperty="id">
+        <if test="categoryImg!=null and categoryImg!=''">
+            insert into category (categoryName,categoryImg,userId)
+            value (#{categoryName},#{categoryImg},#{userId});
+        </if>
+        <if test="categoryImg==null or categoryImg==''">
+            insert into category (categoryName,userId)
+            value (#{categoryName},#{userId});
+        </if>
+    </insert>
+
+    <insert id="insertCategoryByArticleId">
+        insert into article_category (articleId, categoryId)
+        values (#{articleId}, #{categoryId});
+    </insert>
+
+    <delete id="removeArticleCategorys">
+        delete
+        from article_category
+        where articleId = #{id};
+    </delete>
+
+    <select id="getAllCategoryByArticleId" resultType="CategoryPO">
+        SELECT DISTINCT
+            category.categoryName,
+            category.id
+        FROM
+            article_category ,
+            category
+        WHERE
+            article_category.articleId = #{articleId}
+
+    </select>
+
+</mapper>
