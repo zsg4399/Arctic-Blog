@@ -31,9 +31,10 @@ export default class BasicDemo extends React.Component {
       <div>
         <div className="editor-wrapper">
           <BraftEditor
+            contentClassName="article-content"
             value={editorState}
             onChange={this.handleChange}
-            className={addstyle.braftstyle}
+            className={`${addstyle.braftstyle}`}
             placeholder="输入文章内容"
           />
         </div>

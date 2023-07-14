@@ -84,15 +84,19 @@ public class LimitInterfaceAspect {
      */
     public String getCombineKey(RateLimit rateLimiter, JoinPoint point) {
         StringBuffer stringBuffer = new StringBuffer(rateLimiter.key());
+        //根据请求ip进行接口限流
         if (rateLimiter.type() == LimitType.IP) {
             stringBuffer.append(IPUtil.getIpAddr(((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.currentRequestAttributes())).getRequest())).append("-");
-        } else if (rateLimiter.type() == LimitType.ID) {
+        }
+        //根据用户id进行接口限流
+        else if (rateLimiter.type() == LimitType.ID) {
             HttpServletRequest request = ((ServletRequestAttributes) RequestContextHolder.getRequestAttributes()).getRequest();
-            UserContext userContext= UserContextHolder.getContext();
-            MyUserVO myUserVO=userContext.getMyUserVO();
-            Long userId=myUserVO.getId();
+            UserContext userContext = UserContextHolder.getContext();
+            MyUserVO myUserVO = userContext.getMyUserVO();
+            Long userId = myUserVO.getId();
             stringBuffer.append("userId:" + userId + "-");
         }
+
         //获取方法及其对应的类名，并添加到key中
         MethodSignature signature = (MethodSignature) point.getSignature();
         Method method = signature.getMethod();

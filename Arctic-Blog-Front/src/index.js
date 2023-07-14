@@ -1,4 +1,4 @@
-import React from "react";
+import React, { Suspense } from "react";
 import ReactDOM from "react-dom/client";
 import { BrowserRouter } from "react-router-dom";
 import "./index.css";
@@ -18,7 +18,9 @@ root.render(
     <BrowserRouter>
       <Provider store={store}>
         <ConfigProvider locale={locale}>
+          <Suspense>
           <AppRouter />
+          </Suspense>
         </ConfigProvider>
       </Provider>
     </BrowserRouter>

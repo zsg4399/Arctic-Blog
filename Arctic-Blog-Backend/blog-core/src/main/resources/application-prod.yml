@@ -1,0 +1,42 @@
+# 生产环境的配置
+server:
+  port: 8080
+
+spring:
+  datasource:
+    druid:
+      username: yourUsername
+      password: yourPass
+      initial-size: 1 #初始建立1个连接
+      max-active: 3 #当请求数增多的时候增加连接到最多到3个,推荐为CPU核数+1，超过这个数的请求进来将会被阻塞到其他连接被释放
+      min-idle: 1 #最小空闲连接数
+      test-while-idle: true #未初始化默认为false，开启之后在申请连接的时候检测连接是否有效
+      keep-alive: true   #连接复用
+  data:
+    mongodb:
+      host: localhost
+      port: 27017
+      username: yourUsername
+      password: yourPassword
+  config:
+    activate:
+      on-profile: prod
+
+  redis:
+    database: 0
+    host: localhost
+    port: 6379
+    connect-timeout: 30s
+    password: yourPassword
+    jedis:
+      pool:
+        max-active: 6    #设置最大连接数，大于Cpu*2,通常为CPU*2+2
+        max-idle: 4      #最大空闲连接数 CPU*2
+        min-idle: 0      #最小空闲连接数
+        max-wait: 5s     #连接池资源耗尽时，任务申请资源最大的阻塞时间,超时将抛出异常JedisConnectionException
+  elasticsearch:
+    connection-timeout: 10
+    socket-timeout: 10
+    try-conn-timeout: 5
+    host: 127.0.0.1
+    port: 9200

@@ -38,21 +38,17 @@ public class TokenAuthenticationFiliter extends OncePerRequestFilter {
 
     private static AntPathMatcher antPathMatcher = new AntPathMatcher();
 
-    private static final String[] accessable = {"/users/login", "/users/register", "/users/createcode", "/articles/**","/articles/details/**"};
+    private static final String[] accessable = {  "/users/AuthorInfo", "/articles","/articles/*", "/articles/details/*", "/comments/*"};
 
     /**
      * 根据请求路径和请求方法判断是否需要保存登录状态的token信息
      *
      * @param url
-     * @param method
      * @return
      */
-    private boolean urlMatch(String url, String method) {
-        for (String access : accessable) {
-            if (antPathMatcher.match(access, url)) {
-                if (access.equals(accessable[3]) && method.equals("POST")) {
-                    return false;
-                }
+    private boolean urlMatch(String url) {
+        for (int i=0;i<accessable.length;i++) {
+            if (antPathMatcher.match(accessable[i], url)) {
                 return true;
             }
         }
@@ -72,8 +68,9 @@ public class TokenAuthenticationFiliter extends OncePerRequestFilter {
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
         String uri = request.getRequestURI();
         String method = request.getMethod();
-        log.info("uri:{},method:{}",uri,method);
-        if (urlMatch(uri, method) && !method.equals("PUT") && !method.equals("DELETE")) {
+        log.info("uri:{},method:{}", uri, method);
+        //如果请求的接口是get请求，则进行urlMatch
+        if ((uri.equals("/users/login"))||uri.equals("/users/register") ||uri.equals("/users/createcode")|| method.equals("GET") && urlMatch(uri)) {
             filterChain.doFilter(request, response);
             return;
         }
@@ -94,11 +91,16 @@ public class TokenAuthenticationFiliter extends OncePerRequestFilter {
                 SecurityContextHolder.getContext().setAuthentication(authenticationToken);
                 filterChain.doFilter(request, response);      //继续执行过滤器链
             } catch (ExpiredJwtException e) {         //令牌过期
-                String refresh_token =(String) RedisUtil.get(access_token);
+                String refresh_token = (String) RedisUtil.get(access_token);
+                if (!StringUtils.hasText(refresh_token)) {
+                    response.getWriter().write(JacksonUtil.toJsonString(Result.set(ResultCodeType.AUTHENTICATION_EXPIRE)));
+                    return;
+                }
                 try {
+
                     claims = JwtUtil.parseJWT(refresh_token);
                     String new_access_token = JwtUtil.createJWT(claims);
-                    RedisUtil.set(new_access_token,refresh_token,2L, TimeUnit.HOURS);
+                    RedisUtil.set(new_access_token, refresh_token, 2L, TimeUnit.HOURS);
                     Map<String, String> map = new HashMap<>();
                     map.put("access_token", new_access_token);
                     response.getWriter().write(JacksonUtil.toJsonString(map));
@@ -116,8 +118,8 @@ public class TokenAuthenticationFiliter extends OncePerRequestFilter {
                 } catch (Exception ex) {
                     ex.printStackTrace();
                     response.getWriter().write(JacksonUtil.toJsonString(Result.set(ResultCodeType.JWT_ERROR)));
-                }finally {
-                    RedisUtil.expire(access_token,-1L);
+                } finally {
+                    RedisUtil.expire(access_token, -1L);
                 }
 
             } catch (Exception e) {

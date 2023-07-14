@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import welSass from "./welcome.module.scss";
-import profilephoto from "../../static/profilephoto.jpg";
 import { useNavigate } from "react-router-dom";
 
 function Welcome() {
@@ -26,7 +25,7 @@ function Welcome() {
           <img
             alt="if error happen you will see it"
             className={welSass.profilephoto}
-            src={profilephoto}
+            src="/static/static/profilephoto.jpg"
           ></img>
         </div>
         <h1 className={welSass.h1Style}>北极风</h1>

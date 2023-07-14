@@ -35,6 +35,12 @@ public class UserController {
     private JavaMailSender sender;
 
 
+    /**
+     * 对传入的用户名，邮箱等进行校验，符合要求的即会发送验证码到邮箱
+     * 同时使用自定义限流接口，限制用户一分钟内只能发送一次验证码
+     * @param myUserVO
+     * @return
+     */
     @RateLimit(type = LimitType.IP, count = 1)
     @PostMapping("/createcode")
     public Result createVerificationCode(@RequestBody MyUserVO myUserVO) {
@@ -64,6 +70,12 @@ public class UserController {
 
     }
 
+    /**
+     * 每分钟只能发起5次注册请求
+     * @param myUserVO
+     * @return
+     */
+    @RateLimit(type = LimitType.IP,count = 5)
     @PostMapping("/register")
     public Result<String> userRegister(@RequestBody MyUserVO myUserVO) {
         String verification_code = myUserVO.getVerifyCode();
@@ -107,11 +119,18 @@ public class UserController {
 
 
     @PostMapping("/loginout")
-    public void loginou(@RequestHeader("Authorization") String token) {
+    public Result loginou(@RequestHeader("Authorization") String token) {
+        Long userId=UserContextHolder.getContext().getMyUserVO().getId();
         RedisUtil.expire(token, -1L);
+        RedisUtil.expire(new StringBuilder().append(RedisUtil.LOGIN_USER_TOKEN).append(userId).toString(),-1L);
+        return Result.ok();
     }
 
-    @GetMapping("/userinfo")
+    /**
+     * 根据token中的用户id获取其信息返回
+     * @return
+     */
+    @GetMapping()
     public Result getUserInfo() {
         MyUserVO myUserVO = UserContextHolder.getContext().getMyUserVO();
         Long userId = myUserVO.getId();
@@ -129,10 +148,12 @@ public class UserController {
 
     /**
      * 根据用户ID修改对应field的value
+     * 每天限制只能修改10次
      * @param editInfo
      * @return
      * @throws NoSuchFieldException
      */
+    @RateLimit(type = LimitType.ID,count = 10,time = 1,unit = TimeUnit.DAYS)
     @PostMapping("/userinfo")
     public Result<String> modfiyUserinfo(@RequestBody EditInfo editInfo) throws NoSuchFieldException {
         Long userId = UserContextHolder.getContext().getMyUserVO().getId();

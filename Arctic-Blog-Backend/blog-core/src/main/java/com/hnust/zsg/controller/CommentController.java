@@ -45,17 +45,18 @@ public class CommentController {
     }
 
     @GetMapping("/article")
-    public void getAllCommentsByArticleId(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize, @RequestParam("articleId") Long articleId,HttpServletResponse response) {
+    public void getAllCommentsByArticleId(@RequestParam("page") Long page, @RequestParam("pageSize") Long pageSize, @RequestParam("articleId") Long articleId, HttpServletResponse response) {
         if (page < 1 || pageSize < 1) {
             throw new IllegalArgumentException("参数非法，禁止查询");
         }
-        IPage page1=new Page(page,pageSize);
-        IPage<CommentVO> page2=commentService.getArticleComment(page1,articleId);
+        IPage page1 = new Page(page, pageSize);
+        IPage<CommentVO> page2 = commentService.getArticleComment(page1, articleId);
 
         Map map = new HashMap<>();
         map.put("hasmore", page2.getTotal() < pageSize ? false : true);
         map.put("page", page2);
         try {
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(JacksonUtil.toJsonString(map));
         } catch (IOException e) {
             e.printStackTrace();
@@ -79,12 +80,20 @@ public class CommentController {
         map.put("page", page2);
 
         try {
+            response.setContentType("application/json;charset=utf-8");
             response.getWriter().write(JacksonUtil.toJsonString(map));
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
 
+    /**
+     * 对于关于页进行评论，每小时最多发表五条评论
+     *
+     * @param commentDTO
+     * @return
+     */
+    @RateLimit(type = LimitType.ID, count = 5, time = 1, unit = TimeUnit.HOURS)
     @PostMapping("/about")
     public Result addAboutComment(@RequestBody CommentDTO commentDTO) {
         UserContext userContext = UserContextHolder.getContext();
@@ -99,6 +108,14 @@ public class CommentController {
 
     }
 
+    /**
+     * 对于文章进行评论，每小时最多发表五条评论
+     *
+     * @param commentDTO
+     * @param articleId
+     * @return
+     */
+    @RateLimit(type = LimitType.ID, count = 5, time = 1, unit = TimeUnit.HOURS)
     @PostMapping("/article")
     public Result addArticleComment(@RequestBody CommentDTO commentDTO, @RequestParam("articleId") Long articleId) {
         UserContext userContext = UserContextHolder.getContext();
@@ -106,18 +123,20 @@ public class CommentController {
         CommentPO commentPO = CommentConvert.INSTANCE.CommentDTO_TO_CommentPO(commentDTO);
         commentPO.setUserId(userId);
         commentPO = ValidataUtil.validComment(commentPO);
-        if(commentService.addArticleComment(commentPO, articleId)>0) {
+        if (commentService.addArticleComment(commentPO, articleId) > 0) {
             return Result.ok("添加文章评论成功");
         }
         return Result.fail("新增文章评论失败");
     }
 
+    @RateLimit(type = LimitType.ID, count = 5, time = 1, unit = TimeUnit.HOURS)
     @PostMapping("/talk")
     public Result addTalkComment(@RequestBody CommentPO commentPO, @RequestParam("talkId") Long talkId) {
         commentService.addTalkComment(commentPO, talkId);
         return null;
     }
 
+    @RateLimit(type = LimitType.ID, count = 5, time = 1, unit = TimeUnit.HOURS)
     @PostMapping("/reply")
     public Result addReply(@RequestBody CommentDTO commentDTO) {
         if (commentDTO.getPid() == null) {

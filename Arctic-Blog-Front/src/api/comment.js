@@ -37,7 +37,7 @@ const addAboutComment = (content) => {
   return request({
     method: "POST",
     data: {
-      content: content,
+      content
     },
     url: "/comments/about",
   });

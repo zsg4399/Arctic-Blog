@@ -15,7 +15,5 @@ public class ArticleDoc {
      @MongoId
      private Long id;
      private String article_raw;
-     private String article_html;
-
      public ArticleDoc(){};
 }

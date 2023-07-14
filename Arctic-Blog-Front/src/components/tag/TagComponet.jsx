@@ -50,6 +50,9 @@ const TagComponent = () => {
   };
   //编辑框内容变化时的回调
   const handleEditInputChange = (e) => {
+    if (e.target.value.length >= 15) {
+      return;
+    }
     setEditInputValue(e.target.value);
   };
   //按下回车的回调

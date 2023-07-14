@@ -1,10 +1,10 @@
 package com.hnust.zsg.utils;
 
-import com.hnust.zsg.Excption.validation.EmailillegalException;
-import com.hnust.zsg.Excption.validation.PasswordillegalException;
-import com.hnust.zsg.Excption.validation.SexilleaglException;
-import com.hnust.zsg.Excption.validation.UsernameillegalException;
+import com.hnust.zsg.Excption.validation.*;
+import com.hnust.zsg.entity.po.CategoryPO;
 import com.hnust.zsg.entity.po.CommentPO;
+import com.hnust.zsg.entity.po.TagPO;
+import com.hnust.zsg.entity.vo.ArticleContentVO;
 import org.springframework.util.StringUtils;
 
 import java.sql.Timestamp;
@@ -13,6 +13,8 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ValidataUtil {
     private static final String PASSWORD_RULE = "^[A-Z][a-zA-Z0-9]{7,14}$";
@@ -214,10 +216,60 @@ public class ValidataUtil {
 
     public static String getTrueString(String str) {
         if (str == null) {
-            return null;
+            return "";
         }
         return str.trim();
     }
 
 
+    /**
+     * 对文章信息进行参数校验
+     * @param articleContentVO 文章信息实体类
+     */
+    public static ArticleContentVO ValidArticleContentVO(ArticleContentVO articleContentVO) {
+        String title=articleContentVO.getTitle();
+        title=getTrueString(title);
+        if(title.length()>80||title.length()<5){
+            throw new ArticleInfoException("标题长度不符合要求,应为5-80个字符");
+        }
+        articleContentVO.setTitle(title);
+        String summary= articleContentVO.getSummary();
+        summary=getTrueString(summary);
+        if(summary.length()<5||summary.length()>100){
+            throw new ArticleInfoException(("摘要内容不符合要求，应为5-100个字符"));
+        }
+
+        articleContentVO.setSummary(summary);
+        List<TagPO> tags=articleContentVO.getTags()==null?new ArrayList<>(0):articleContentVO.getTags();
+        //标签是必须的，但不能超过五个
+        if(tags.size()==0|| tags.size()>5) {
+            throw new ArticleInfoException("请至少选择一个标签，且标签个数不能超过五个");
+        }
+        for (TagPO tag : tags) {
+            String tagName= tag.getTagName();
+            tagName=getTrueString(tagName);
+            if(tagName.length()>15){
+                //只取标签的前十五个字符
+                tagName=tagName.substring(0,15);
+            }
+            tag.setTagName(tagName);
+        }
+        articleContentVO.setTags(tags);
+        List<CategoryPO> categorys=articleContentVO.getCategorys()==null?new ArrayList<>():articleContentVO.getCategorys();
+        //分类专栏不能超过三个
+        if(categorys.size()>3){
+           throw new ArticleInfoException("文章分类专栏不能超过三个");
+        }
+        for (CategoryPO category : categorys) {
+            String categoryName= category.getCategoryName();
+            categoryName=getTrueString(categoryName);
+            if(categoryName.length()>15){
+                categoryName=categoryName.substring(0,15);
+            }
+            category.setCategoryImg(null);
+            category.setCategoryName(categoryName);
+        }
+        articleContentVO.setCategorys(categorys);
+        return articleContentVO;
+    }
 }

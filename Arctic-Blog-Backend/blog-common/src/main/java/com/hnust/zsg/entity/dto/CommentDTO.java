@@ -4,9 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 
 public class CommentDTO {
     private String content;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long pid;
-    @JsonInclude(JsonInclude.Include.NON_NULL)
     private Long reply_uid;
 
     public CommentDTO() {

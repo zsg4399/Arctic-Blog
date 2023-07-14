@@ -10,7 +10,7 @@ Target Server Type    : MYSQL
 Target Server Version : 80028
 File Encoding         : 65001
 
-Date: 2023-05-25 14:53:06
+Date: 2023-06-09 19:55:04
 */
 
 SET FOREIGN_KEY_CHECKS=0;
@@ -25,13 +25,19 @@ CREATE TABLE `about_comment` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
+-- Records of about_comment
+-- ----------------------------
+INSERT INTO `about_comment` VALUES ('5');
+INSERT INTO `about_comment` VALUES ('14');
+
+-- ----------------------------
 -- Table structure for article
 -- ----------------------------
 DROP TABLE IF EXISTS `article`;
 CREATE TABLE `article` (
   `id` int unsigned NOT NULL AUTO_INCREMENT,
   `title` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '文章标题',
-  `imageUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci DEFAULT NULL COMMENT '图片存储路径',
+  `imageUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '图片存储路径',
   `createTime` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   `articleLikes` int unsigned NOT NULL DEFAULT '0' COMMENT '文章点赞量',
   `articleViews` int unsigned NOT NULL DEFAULT '0' COMMENT '文章浏览量',
@@ -39,9 +45,15 @@ CREATE TABLE `article` (
   `authorId` int unsigned NOT NULL COMMENT '作者账号id',
   `summary` varchar(255) NOT NULL,
   `articleStars` int unsigned NOT NULL DEFAULT '0',
-  `deleteUrl` varchar(255) NOT NULL COMMENT '图片的删除路径',
+  `deleteUrl` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT '' COMMENT '图片的删除路径',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=31 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of article
+-- ----------------------------
+INSERT INTO `article` VALUES ('30', 'vue+Element-Plus+springboot整合mybatis-plus后台管理系统的学习笔记', 'https://s2.loli.net/2023/03/23/Hf1KGdN4q5rcaOY.png', '2023-03-23 22:14:21', '0', '0', '2023-03-23 22:14:21', '1', '初学者心得随笔', '0', 'https://smms.app/delete/AiwdOlcIMPSmzyhkEapTot59rJ');
+INSERT INTO `article` VALUES ('31', 'Redis安装教程（阿里云服务器 OS）', 'https://s2.loli.net/2023/06/08/PkTVQv4O35nRWmq.png', '2023-06-08 16:38:21', '0', '0', '2023-06-08 16:38:21', '1', '阿里云服务器上redis的安装（兼容centos8）', '0', 'https://smms.app/delete/cNwdT34y8KRFqYzslPn5vX6QbJ');
 
 -- ----------------------------
 -- Table structure for article_category
@@ -53,7 +65,14 @@ CREATE TABLE `article_category` (
   `categoryId` int unsigned NOT NULL,
   PRIMARY KEY (`id`),
   KEY `articleId_categoryId` (`articleId`,`categoryId`) USING BTREE
-) ENGINE=InnoDB AUTO_INCREMENT=32 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=33 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of article_category
+-- ----------------------------
+INSERT INTO `article_category` VALUES ('29', '30', '34');
+INSERT INTO `article_category` VALUES ('30', '30', '35');
+INSERT INTO `article_category` VALUES ('32', '31', '37');
 
 -- ----------------------------
 -- Table structure for article_comment
@@ -64,7 +83,13 @@ CREATE TABLE `article_comment` (
   `articleId` int unsigned NOT NULL COMMENT '文章id',
   `commentId` int unsigned NOT NULL COMMENT '评论id',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of article_comment
+-- ----------------------------
+INSERT INTO `article_comment` VALUES ('1', '30', '12');
+INSERT INTO `article_comment` VALUES ('2', '30', '15');
 
 -- ----------------------------
 -- Table structure for article_like_star
@@ -82,6 +107,11 @@ CREATE TABLE `article_like_star` (
 ) ENGINE=InnoDB AUTO_INCREMENT=4 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
+-- Records of article_like_star
+-- ----------------------------
+INSERT INTO `article_like_star` VALUES ('3', '30', '1', '1', '0', '2023-04-03 14:40:05', '2023-04-14 12:10:09');
+
+-- ----------------------------
 -- Table structure for category
 -- ----------------------------
 DROP TABLE IF EXISTS `category`;
@@ -91,7 +121,14 @@ CREATE TABLE `category` (
   `categoryImg` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL DEFAULT 'https://s2.loli.net/2023/03/21/EYg85sFPRtIW7Z9.png' COMMENT '分类图片',
   `userId` int unsigned NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=37 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=38 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of category
+-- ----------------------------
+INSERT INTO `category` VALUES ('34', '前端', 'https://s2.loli.net/2023/03/21/EYg85sFPRtIW7Z9.png', '1');
+INSERT INTO `category` VALUES ('35', '后端', 'https://s2.loli.net/2023/03/21/EYg85sFPRtIW7Z9.png', '1');
+INSERT INTO `category` VALUES ('37', '运维部署', 'https://s2.loli.net/2023/03/21/EYg85sFPRtIW7Z9.png', '1');
 
 -- ----------------------------
 -- Table structure for comment
@@ -107,7 +144,21 @@ CREATE TABLE `comment` (
   `replyUid` int unsigned NOT NULL DEFAULT '0' COMMENT '回复的用户id，为0则表示没有回复二级评论',
   PRIMARY KEY (`id`),
   KEY `pid` (`pid`) USING BTREE COMMENT '父评论的id'
-) ENGINE=InnoDB AUTO_INCREMENT=14 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=16 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of comment
+-- ----------------------------
+INSERT INTO `comment` VALUES ('5', '1', '2023-05-22 16:20:08', '0', 'test', '0', '0');
+INSERT INTO `comment` VALUES ('6', '1', '2023-05-23 23:02:13', '0', 'test', '5', '0');
+INSERT INTO `comment` VALUES ('8', '1', '2023-05-24 14:20:54', '0', '测试一下回复二级评论功能', '5', '0');
+INSERT INTO `comment` VALUES ('9', '1', '2023-05-24 14:28:40', '0', '测试一下回复二级评论功能', '5', '0');
+INSERT INTO `comment` VALUES ('10', '1', '2023-05-24 14:28:56', '0', '测试一下回复二级评论功能', '5', '0');
+INSERT INTO `comment` VALUES ('11', '1', '2023-05-24 14:33:17', '0', '测试一下回复二级评论的功能', '5', '1');
+INSERT INTO `comment` VALUES ('12', '1', '2023-05-24 16:39:39', '0', '嘿嘿嘿', '0', '0');
+INSERT INTO `comment` VALUES ('13', '1', '2023-05-24 16:56:16', '0', 'test', '12', '0');
+INSERT INTO `comment` VALUES ('14', '1', '2023-05-30 22:56:43', '0', '测试第二波', '0', '0');
+INSERT INTO `comment` VALUES ('15', '1', '2023-05-30 23:17:28', '0', '测试测试', '0', '0');
 
 -- ----------------------------
 -- Table structure for comment_like
@@ -120,6 +171,10 @@ CREATE TABLE `comment_like` (
   `isLike` tinyint unsigned NOT NULL DEFAULT '0' COMMENT '0代表未操作，1代表点赞',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of comment_like
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for reply
@@ -137,6 +192,10 @@ CREATE TABLE `reply` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
+-- Records of reply
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for tag
 -- ----------------------------
 DROP TABLE IF EXISTS `tag`;
@@ -146,7 +205,16 @@ CREATE TABLE `tag` (
   `tagName` varchar(255) CHARACTER SET utf8 COLLATE utf8_general_ci NOT NULL COMMENT '标签名',
   `authorId` int unsigned NOT NULL DEFAULT '0' COMMENT '创建标签的用户',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=45 DEFAULT CHARSET=utf8mb3;
+) ENGINE=InnoDB AUTO_INCREMENT=47 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of tag
+-- ----------------------------
+INSERT INTO `tag` VALUES ('42', '30', 'springboot', '1');
+INSERT INTO `tag` VALUES ('43', '30', 'java', '1');
+INSERT INTO `tag` VALUES ('44', '30', 'element-plus', '1');
+INSERT INTO `tag` VALUES ('45', '31', 'redis', '1');
+INSERT INTO `tag` VALUES ('46', '31', '阿里云', '1');
 
 -- ----------------------------
 -- Table structure for talk
@@ -161,6 +229,10 @@ CREATE TABLE `talk` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
+-- Records of talk
+-- ----------------------------
+
+-- ----------------------------
 -- Table structure for talk_comment
 -- ----------------------------
 DROP TABLE IF EXISTS `talk_comment`;
@@ -170,6 +242,10 @@ CREATE TABLE `talk_comment` (
   `commentId` int unsigned NOT NULL COMMENT '评论的id',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of talk_comment
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for talk_like
@@ -182,6 +258,10 @@ CREATE TABLE `talk_like` (
   `isLike` tinyint unsigned NOT NULL COMMENT '0代表未点赞,1代表已点赞',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of talk_like
+-- ----------------------------
 
 -- ----------------------------
 -- Table structure for user
@@ -207,6 +287,11 @@ CREATE TABLE `user` (
 ) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb3;
 
 -- ----------------------------
+-- Records of user
+-- ----------------------------
+INSERT INTO `user` VALUES ('1', '北极风', '$2a$10$6GXlv3GnCvr7dHC42ZGXtO6RINOF3/2vTcZwqgBX9YaI77UftDPMW', 'abc19990116@163.com', '1', 'profilephoto.jpg', '43,4301,430181', '2002-08-07', '码农一枚罢了', '男', '', '2023-04-21 15:32:22', '2023-04-21 15:32:22');
+
+-- ----------------------------
 -- Table structure for user_role
 -- ----------------------------
 DROP TABLE IF EXISTS `user_role`;
@@ -216,3 +301,9 @@ CREATE TABLE `user_role` (
   `role` varchar(255) NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb3;
+
+-- ----------------------------
+-- Records of user_role
+-- ----------------------------
+INSERT INTO `user_role` VALUES ('1', '1', 'admin');
+INSERT INTO `user_role` VALUES ('2', '1', 'user');

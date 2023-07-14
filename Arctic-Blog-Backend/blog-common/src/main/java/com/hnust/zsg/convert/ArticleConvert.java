@@ -1,5 +1,6 @@
 package com.hnust.zsg.convert;
 
+import com.hnust.zsg.entity.doc.ArticleEsDOC;
 import com.hnust.zsg.entity.po.ArticlePO;
 import com.hnust.zsg.entity.vo.ArticleContentVO;
 import com.hnust.zsg.entity.vo.ArticleDetailVO;
@@ -22,5 +23,6 @@ public interface ArticleConvert {
     @Mapping(source = "createTime", target = "createTime", dateFormat = "yyyy--MM-dd HH:mm:ss")
     ArticleDetailVO PO_TO_DETAIL_VO(ArticlePO articlePO);
 
+    ArticleEsDOC PO_TO_ESDOC(ArticlePO articlePO);
 
 }

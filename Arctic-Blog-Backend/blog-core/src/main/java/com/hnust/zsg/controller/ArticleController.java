@@ -9,16 +9,20 @@ import com.hnust.zsg.entity.dto.SwiperVO;
 import com.hnust.zsg.entity.po.ArticlePO;
 import com.hnust.zsg.entity.vo.ArticleContentVO;
 import com.hnust.zsg.entity.vo.ArticleListVO;
+import com.hnust.zsg.entity.vo.ArticleSearchVO;
 import com.hnust.zsg.enumeration.LimitType;
 import com.hnust.zsg.enumeration.ResultCodeType;
 import com.hnust.zsg.service.ArticleService;
 import com.hnust.zsg.utils.JacksonUtil;
 import com.hnust.zsg.utils.RedisUtil;
 import com.hnust.zsg.utils.Result;
+import com.hnust.zsg.utils.ValidataUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Lazy;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
 
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
@@ -41,9 +45,12 @@ public class ArticleController {
      * @return
      */
     @GetMapping()
-    public Result<IPage> getAllArticlesHot(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize, @RequestParam("order") String order) {
+    public Result<IPage> getAllArticlesHot(@RequestParam("page") int page, @RequestParam("pageSize") int pageSize, @RequestParam("order") String order, @RequestParam(value = "userId", required = false) Long userId) {
+        if (page < 1 || pageSize < 1 || userId.intValue() < 1 || (!order.equals("createTime") && !order.equals("articleLikes"))) {
+            throw new IllegalArgumentException("非法参数查询");
+        }
         Page<ArticlePO> page1 = new Page(page, pageSize);
-        Page<ArticleListVO> page2 = articleService.getAllArticle(page1, order);
+        Page<ArticleListVO> page2 = articleService.getAllArticle(page1, order, userId);
         return Result.ok(page2);
     }
 
@@ -65,23 +72,31 @@ public class ArticleController {
 
     /**
      * 发布文章并启用事务处理
+     * 每个用户每天只能发布一篇文章
      *
-     * @param articleContentVO
+     * @param
      * @return
      */
+    @RateLimit(type = LimitType.ID, time = 1, count = 1, unit = TimeUnit.DAYS)
     @PostMapping()
-    public Result addArticle(@RequestBody ArticleContentVO articleContentVO) {
-
+    public Result addArticle(StandardMultipartHttpServletRequest request) {
+        //获取图片文件流
+        MultipartFile imageFile = request.getFile("image");
+        //提取文章json字符串并将其反序列化成ArticleContentVO对象
+        ArticleContentVO articleContentVO = JacksonUtil.parseObject(request.getParameter("article"), ArticleContentVO.class);
+        articleContentVO.setAuthorId(UserContextHolder.getContext().getMyUserVO().getId());
+        articleContentVO = ValidataUtil.ValidArticleContentVO(articleContentVO);
         try {
-            articleService.addArticle(articleContentVO);
+            articleService.addArticle(imageFile, articleContentVO);
         } catch (RuntimeException e) {
             e.printStackTrace();
             return Result.set(ResultCodeType.INSERT_ARTICLE_ERROR);
         }
         return Result.set(ResultCodeType.SUCCESS);
+
     }
 
-
+    @RateLimit(type = LimitType.ID, count = 20, time = 1, unit = TimeUnit.DAYS)
     @PutMapping()
     public Result modifyArticle(@RequestBody ArticleContentVO articleContentVO) {
         return null;
@@ -94,10 +109,11 @@ public class ArticleController {
      * @param id
      * @return
      */
+    @RateLimit(type = LimitType.ID, count = 5, time = 1, unit = TimeUnit.DAYS)
     @DeleteMapping()
     public Result<String> deleteArticleById(@RequestParam("id") Long id) {
-        if (id == null) {
-            return Result.fail("请传递正确的id值");
+        if (id == null || id.intValue() <= 0) {
+            return Result.fail("请传递正确的文章id值");
         }
         String deleteUrl = null;
         try {
@@ -114,6 +130,7 @@ public class ArticleController {
 
     /**
      * 用户给文章点赞功能
+     * 每日限流每个用户只能点赞20次文章
      *
      * @return
      */
@@ -128,6 +145,7 @@ public class ArticleController {
 
     /**
      * 用户给文章收藏功能
+     * 每日限流每个用户只能收藏20次文章
      *
      * @return
      */
@@ -140,17 +158,31 @@ public class ArticleController {
         return Result.ok(!isStar);
     }
 
-    @GetMapping("getSwiper")
+    /**
+     * 获取热度最高的四张图片作为首页轮播图
+     *
+     * @return
+     */
+    @GetMapping("/getSwiper")
     public Result getSwipper() {
-        Map map= RedisUtil.hget(RedisUtil.HOME_SWIPPER_4);
-        if(map.isEmpty()){
+        Map map = RedisUtil.hget(RedisUtil.HOME_SWIPPER_4);
+        if (map.isEmpty()) {
             return Result.fail();
         }
-        SwiperVO[] result=new SwiperVO[map.size()];
-        for(int i=0;i< map.size();i++){
-            result[i]=JacksonUtil.parseObject((String)map.get(String.valueOf(i+1)),SwiperVO.class);
+        SwiperVO[] result = new SwiperVO[map.size()];
+        for (int i = 0; i < map.size(); i++) {
+            result[i] = JacksonUtil.parseObject((String) map.get(String.valueOf(i + 1)), SwiperVO.class);
         }
         return Result.ok(result);
+    }
+
+    @GetMapping("/search")
+    public Result searchArticle(@RequestParam("message") String message) {
+        if (message == null || (message = message.trim()).length() == 0 || message.length() > 25) {
+            return Result.fail("请输入需要搜索的关键信息，并控制长度25个字以内");
+        }
+        ArticleSearchVO articleSearchVO = articleService.searchArticle(message);
+        return Result.ok(articleSearchVO);
     }
 }
 

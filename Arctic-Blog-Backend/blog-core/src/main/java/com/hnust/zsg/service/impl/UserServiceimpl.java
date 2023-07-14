@@ -86,7 +86,7 @@ public class UserServiceimpl implements UserService {
      * @param username
      * @param email
      */
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 5, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     @Override
     public void USERNAME_EMAIL_VERIFICATION(String username, String email) {
         EMAIL_VERIFICATION(email);
@@ -101,7 +101,7 @@ public class UserServiceimpl implements UserService {
      * @param email
      * @return
      */
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 5, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     @Override
     public int RegisterUser(String username, String password, String email, PasswordEncoder encoder) {
         //判断用户名和邮箱号是否被占用，以及用户名邮箱号和头像格式是否正确
@@ -130,7 +130,7 @@ public class UserServiceimpl implements UserService {
      * @return
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 5)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 5, isolation = Isolation.READ_COMMITTED)
     public int updateUserinfo(Long userId, String field, String value) throws NoSuchFieldException {
         field = field == null ? "" : field.trim();
         value = value == null ? "" : value.trim();
@@ -145,7 +145,7 @@ public class UserServiceimpl implements UserService {
                 result = userMapper.updateBirthdayById(userId, birthday);
                 break;
             case "address":
-                userMapper.updateAddressById(userId,value);
+                userMapper.updateAddressById(userId, value);
                 break;
             case "sex":
                 ValidataUtil.ValidSex(value);
@@ -157,8 +157,8 @@ public class UserServiceimpl implements UserService {
             default:
                 throw new NoSuchFieldException("非法修改用户信息");
         }
-        String key=new StringBuilder(RedisUtil.LOGIN_USERINFO).append(userId).toString();
-        RedisUtil.expire(key,-1L);
+        String key = new StringBuilder(RedisUtil.LOGIN_USERINFO).append(userId).toString();
+        RedisUtil.expire(key, -1L);
         return result;
 
     }
@@ -171,6 +171,7 @@ public class UserServiceimpl implements UserService {
      * @throws UsernameNotFoundException
      */
     @Override
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UserPO userPO = null;
         if (username.contains("@")) {
@@ -197,6 +198,7 @@ public class UserServiceimpl implements UserService {
     }
 
 
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     @Override
     public UserInfoVO getBasicUserinfoById(Long id) {
         UserPO userPO = userMapper.getBasicUserinfoById(id);
@@ -213,10 +215,11 @@ public class UserServiceimpl implements UserService {
         return UserConvert.INSTANCE.PO_TO_INFOVO(userPO);
     }
 
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     @Override
     public AvatarVO getAvatarVO(Long id) {
         String key = new StringBuilder(RedisUtil.LOGIN_USERINFO).append(id).toString();
-        String value =(String) RedisUtil.get(key);
+        String value = (String) RedisUtil.get(key);
         AvatarVO avatarVO = new AvatarVO();
         UserInfoVO userInfoVO;
         if (StringUtils.hasText(value)) {
@@ -234,21 +237,22 @@ public class UserServiceimpl implements UserService {
         return avatarVO;
     }
 
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     @Override
     public void setAuthorInfoToRedis() {
-        LambdaQueryWrapper<ArticlePO> queryWrapper=new LambdaQueryWrapper<>();
-        queryWrapper.eq(ArticlePO::getAuthorId,1L);
-        Integer articles=articleMapper.selectCount(queryWrapper);
+        LambdaQueryWrapper<ArticlePO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.eq(ArticlePO::getAuthorId, 1L);
+        Integer articles = articleMapper.selectCount(queryWrapper);
 
-        LambdaQueryWrapper<TagPO> queryWrapper1=new LambdaQueryWrapper<>();
-        queryWrapper1.eq(TagPO::getAuthorId,1L);
-        Integer tags=tagMapper.selectCount(queryWrapper1);
+        LambdaQueryWrapper<TagPO> queryWrapper1 = new LambdaQueryWrapper<>();
+        queryWrapper1.eq(TagPO::getAuthorId, 1L);
+        Integer tags = tagMapper.selectCount(queryWrapper1);
 
-        LambdaQueryWrapper<CategoryPO> queryWrapper2=new LambdaQueryWrapper<>();
-        queryWrapper2.eq(CategoryPO::getUserId,1L);
-        Integer categorys=categoryMapper.selectCount(queryWrapper2);
+        LambdaQueryWrapper<CategoryPO> queryWrapper2 = new LambdaQueryWrapper<>();
+        queryWrapper2.eq(CategoryPO::getUserId, 1L);
+        Integer categorys = categoryMapper.selectCount(queryWrapper2);
 
-        AuthorInfoDTO authorInfoDTO=new AuthorInfoDTO(0,(categorys),(articles),tags);
-        RedisUtil.set(RedisUtil.AUTHOR_INFO,authorInfoDTO,1L, TimeUnit.DAYS);
+        AuthorInfoDTO authorInfoDTO = new AuthorInfoDTO(0, (categorys), (articles), tags);
+        RedisUtil.set(RedisUtil.AUTHOR_INFO, authorInfoDTO, 1L, TimeUnit.DAYS);
     }
 }

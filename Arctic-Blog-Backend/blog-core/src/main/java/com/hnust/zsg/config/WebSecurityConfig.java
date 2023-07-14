@@ -9,6 +9,7 @@ import com.hnust.zsg.utils.SpringBeanUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -25,6 +26,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true)
 public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
+
 
     /**
      * 指定加密方式
@@ -54,24 +56,26 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http.authorizeRequests()
-                .antMatchers("/users/login","/users/register","/users/createcode","/articles/**","/articles/details/**").anonymous()
-                .anyRequest().authenticated()  //除了注册和登录相关功能的请求，其他均需要认证
+                //对登录、注册、创建验证码允许不做校验
+                .antMatchers(HttpMethod.POST, "/users/login", "/users/register", "/users/createcode").anonymous()
+                .antMatchers(HttpMethod.GET, "/users/AuthorInfo", "/comments/*", "/articles","/articles/*", "/articles/details/*").anonymous()
+                .anyRequest().authenticated()  //其他请求均需要token校验才放行
                 .and()
                 .exceptionHandling()
-                .accessDeniedHandler(myAccessDeniedHandler)      //权限校验失败处理器
+                //权限校验失败处理器
+                .accessDeniedHandler(myAccessDeniedHandler)
                 .and()
                 .csrf()               //关闭CSRF过滤器,采用jwt进行权限认证
                 .disable()
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
-                .and();
-
-        //将token解析认证过滤器添加到UsernamePasswordAuthenticationFilter之前
-        http.addFilterBefore(new TokenAuthenticationFiliter(), UsernamePasswordAuthenticationFilter.class)
-                .addFilterAt(new TokenLoginFiliter(authenticationManager()),UsernamePasswordAuthenticationFilter.class);
+                .and()
+                .addFilterBefore(new TokenAuthenticationFiliter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterAt(new TokenLoginFiliter(authenticationManager()), UsernamePasswordAuthenticationFilter.class);
         http.cors();    //解决跨域问题
 
 
     }
+
     @Override
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(daoAuthenticationProvider());

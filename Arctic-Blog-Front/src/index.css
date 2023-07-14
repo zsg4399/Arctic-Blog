@@ -5,6 +5,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+mark {
+  background-color: #40a9ff;
+  text-decoration: underline;
+}
 ul,
 li {
   list-style: none;
@@ -78,6 +82,7 @@ html,
 .my-border {
   width: 80%;
   height: 5px;
+  margin: 0 auto;
   background: linear-gradient(
     130deg,
     rgb(36, 198, 220) 15.56%,
@@ -107,7 +112,6 @@ html,
   padding-left: 10px;
   padding-right: 10px;
   border: 1px solid #bebebe;
-
 }
 .my-tag {
   display: inline-block;
@@ -124,5 +128,49 @@ html,
 }
 #root {
   color: #bebebe;
+}
+
+.article-title {
+  color: #222226;
+  font-size: 28px;
+  font-weight: 600;
+  word-wrap: break-word;
+  word-break: break-all;
+}
+.searchSelect {
+  width: 526px;
+  border-radius: 50%;
+}
+.article-content {
+  color: #4d4d4d;
+  font-size: 16px;
+  line-height: 28px;
+  font-weight: 400;
+}
+.neccessary::before {
+  position: absolute;
+  content: "*";
+  left: -16px;
+  color: #fc5531;
+  font-size: 20px;
+}
+.recordTitle {
+  display: inline-block;
+  font-size: 16px;
+  width: 90px;
+  height: 20px;
+  text-align: left;
+}
+.word-hidden{
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+@media screen and (max-width: 568px) {
+  .antd-a-style {
+    font-size: 12px;
+  }
 }
 @import "~antd/dist/antd.css";

@@ -2,12 +2,13 @@
 <project version="4">
   <component name="CompilerConfiguration">
     <annotationProcessing>
+      <profile default="true" name="Default" enabled="true" />
       <profile name="Maven default annotation processors profile" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
       </profile>
-      <profile name="Annotation profile for blog-cloud" enabled="true">
+      <profile name="Annotation profile for blog-common" enabled="true">
         <sourceOutputDir name="target/generated-sources/annotations" />
         <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
         <outputRelativeToContentRoot value="true" />
@@ -18,6 +19,15 @@
           <entry name="E:/Maven/repository/org/projectlombok/lombok-mapstruct-binding/0.2.0/lombok-mapstruct-binding-0.2.0.jar" />
         </processorPath>
         <module name="blog-common" />
+      </profile>
+      <profile name="Annotation profile for blog-cloud" enabled="true">
+        <sourceOutputDir name="target/generated-sources/annotations" />
+        <sourceTestOutputDir name="target/generated-test-sources/test-annotations" />
+        <outputRelativeToContentRoot value="true" />
+        <processorPath useClasspath="false">
+          <entry name="E:/Maven/repository/org/projectlombok/lombok/1.18.24/lombok-1.18.24.jar" />
+          <entry name="E:/Maven/repository/org/springframework/boot/spring-boot-configuration-processor/2.6.11/spring-boot-configuration-processor-2.6.11.jar" />
+        </processorPath>
         <module name="blog-core" />
       </profile>
     </annotationProcessing>

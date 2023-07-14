@@ -1,0 +1,39 @@
+# 开发环境的配置
+server:
+  port: 8001
+spring:
+  datasource:
+    druid:
+      password: yourPass
+      username: yourUsername
+      min-idle: 1
+      max-active: 7
+      initial-size: 1
+      test-while-idle: true
+
+  redis:
+    host: localhost
+    port: 6379
+    password: yourPass
+    database: 0            #数据库索引，默认为0
+    connect-timeout: 30s   #连接等待的最大超时时间
+    lettuce: #线程安全，比jedis更适合高并发环境,且是springboot内置默认使用的
+      pool:
+        max-active: 14    #设置最大连接数，大于Cpu*2,通常为CPU*2+2
+        max-idle: 12      #最大空闲连接数 CPU*2
+        min-idle: 0      #最小空闲连接数
+        max-wait: 5s     #连接池资源耗尽时，任务申请资源最大的阻塞时间,超时将抛出异常JedisConnectionException
+  data:
+    mongodb:
+      port: 27017   #配置端口号
+      host: localhost   #设置MongoDB安装的的主机号
+  config:
+    activate:
+      on-profile: dev
+  # profile: dev 这种格式已被标记为deprecated,请使用spring.config.activate.on-profile来声明
+  elasticsearch:
+    connection-timeout: 10
+    socket-timeout: 30
+    try-conn-timeout: 5
+    host: 127.0.0.1
+    port: 9200

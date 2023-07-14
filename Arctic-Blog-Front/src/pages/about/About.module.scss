@@ -27,29 +27,28 @@
   }
 }
 
-
-.h3Title{
+.h3Title {
   color: rgb(255, 255, 255);
   font-weight: 600;
   font-size: 24px;
 }
-.commonLine{
+.commonLine {
   height: 24px;
   line-height: 24px;
   display: flex;
   align-items: center;
 }
-.description{
+.description {
   line-height: 24px;
   font-size: 16px;
   font-weight: 600;
   word-wrap: break-word;
   letter-spacing: 1px;
 }
-.leftGrid{
+.leftGrid {
   width: 100%;
 }
-.Comments{
+.Comments {
   background-color: rgb(33, 33, 33);
   margin-top: 20px;
   width: 100%;
@@ -61,7 +60,7 @@
   border-radius: 10px;
 }
 
-.col1{
+.col1 {
   height: 100%;
   width: 100%;
   display: flex;
@@ -69,3 +68,41 @@
   justify-content: center;
 }
 
+@media screen and(max-width:615px) {
+  .mainGrid {
+    display: flex;
+  }
+  .col1 {
+    display: none;
+  }
+}
+
+@media screen and(max-width:515px) {
+  .mainGrid {
+    width: 450px;
+  }
+}
+
+@media screen and(max-width:480px) {
+  .mainGrid {
+    width: 400px;
+  }
+}
+
+@media screen and(max-width:430px) {
+  .mainGrid {
+    width: 350px;
+  }
+}
+
+@media screen and(max-width:380px) {
+  .mainGrid {
+    width: 300px;
+  }
+}
+
+@media screen and(max-width:330px) {
+  .mainGrid {
+    width: 250px;
+  }
+}

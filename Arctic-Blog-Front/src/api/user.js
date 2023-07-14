@@ -2,7 +2,7 @@ import request from "./reuqest";
 const getUserInfo = () => {
   return request({
     method: "GET",
-    url: "/users/userinfo",
+    url: "/users",
   });
 };
 

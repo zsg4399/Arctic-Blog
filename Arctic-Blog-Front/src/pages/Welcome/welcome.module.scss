@@ -1,7 +1,8 @@
 .welContainer {
-  height: 100%;
-  background-image: url("../../static/welcomebcg.png");
-  background-size: cover;
+  width: 100%;
+  min-height: 100%;
+  background-image: url("../../../public/static/static/welcomebcg.png");
+  background-size: 100% 100%;
   text-align: center;
   display: flex;
   justify-content: center;

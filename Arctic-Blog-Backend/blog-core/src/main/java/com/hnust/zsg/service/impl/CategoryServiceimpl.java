@@ -16,25 +16,26 @@ import java.util.List;
 public class CategoryServiceimpl extends ServiceImpl<CategoryMapper, CategoryPO> implements CategoryService {
     @Autowired
     private CategoryMapper categoryMapper;
+
     @Override
     public UserCategoryVO getAllCategoryByUserId(Long id) {
 
-        UserCategoryVO categoryVO=new UserCategoryVO();
+        UserCategoryVO categoryVO = new UserCategoryVO();
         categoryVO.setCategorys(categoryMapper.getAllCategoryByUserId(id));
         categoryVO.setUserId(id);
         return categoryVO;
     }
 
     @Override
-    public void insertCategorysByArticleId(Long articleId, List<CategoryPO> categorys,Long userId) {
+    public void insertCategorysByArticleId(Long articleId, List<CategoryPO> categorys, Long userId) {
         for (CategoryPO category : categorys) {
-        Long categoryId=categoryMapper.searchCategoryIsExist(category.getCategoryName(),userId);
-            if(categoryId==null){
-             CategoryPO categoryPO=new CategoryPO(null,category.getCategoryName(),category.getCategoryImg(),userId);
-             categoryMapper.insertCategory(categoryPO);
-             categoryId=categoryPO.getId();
-             categoryMapper.insertCategoryByArticleId(articleId,categoryId);
-         }
+            Long categoryId = categoryMapper.searchCategoryIsExist(category.getCategoryName(), userId);
+            if (categoryId == null) {
+                CategoryPO categoryPO = new CategoryPO(null, category.getCategoryName(), category.getCategoryImg(), userId);
+                categoryMapper.insertCategory(categoryPO);
+                categoryId = categoryPO.getId();
+            }
+            categoryMapper.insertCategoryByArticleId(articleId, categoryId);
 
         }
     }
@@ -46,7 +47,7 @@ public class CategoryServiceimpl extends ServiceImpl<CategoryMapper, CategoryPO>
 
 
     @Override
-    public List<CategoryPO> getAllCategoryByArticleId(Long id){
+    public List<CategoryPO> getAllCategoryByArticleId(Long id) {
         return categoryMapper.getAllCategoryByArticleId(id);
     }
 }

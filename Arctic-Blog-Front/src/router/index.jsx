@@ -1,22 +1,24 @@
+import { lazy } from "react";
 import { useRoutes } from "react-router-dom";
-import Welcome from "../pages/Welcome/Welcome";
-import Index from "../pages/index/Index";
-import Register from "../components/Register";
-import Login from "../components/Login";
-import HomePage from "../components/HomePage";
-import AddArticle from "../pages/addarticle/AddArticle";
-import ArticleContent from "../components/articleContent/articleContent";
-import PersonCenter from "../pages/PersonCenter/PersonCenter";
-import MyDetail from "../pages/PersonCenter/component/MyDetail";
-import About from "../pages/about/About";
-
+const WelCome = lazy(() => import("../pages/Welcome/Welcome"));
+const PersonCenter = lazy(() => import("../pages/PersonCenter/PersonCenter"));
+const MyDetail = lazy(() => import("../pages/PersonCenter/component/MyDetail"));
+const AddArticle = lazy(() => import("../pages/addarticle/AddArticle"));
+const Index = lazy(() => import("../pages/index/Index"));
+const Homepage = lazy(() => import("../components/HomePage"));
+const Register = lazy(() => import("../components/Register"));
+const Login = lazy(() => import("../components/Login"));
+const ArticleContent = lazy(() =>
+  import("../components/articleContent/articleContent")
+);
+const About = lazy(() => import("../pages/about/About"));
 
 //使用useRoutes注册路由必须在最外侧包裹一层hashroute或者browerroute
 const AppRouter = () => {
   let route = useRoutes([
     {
       path: "/",
-      element: <Welcome />,
+      element: <WelCome />,
     },
     {
       path: "/person/center",
@@ -46,7 +48,7 @@ const AppRouter = () => {
         },
         {
           path: "homepage",
-          element: <HomePage />,
+          element: <Homepage />,
         },
         {
           path: "article/detail",

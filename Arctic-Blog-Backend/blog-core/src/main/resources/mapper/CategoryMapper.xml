@@ -34,6 +34,7 @@
         values (#{articleId}, #{categoryId});
     </insert>
 
+
     <delete id="removeArticleCategorys">
         delete
         from article_category
@@ -41,15 +42,12 @@
     </delete>
 
     <select id="getAllCategoryByArticleId" resultType="CategoryPO">
-        SELECT DISTINCT
-            category.categoryName,
-            category.id
-        FROM
-            article_category ,
-            category
-        WHERE
-            article_category.articleId = #{articleId}
-
+        SELECT DISTINCT category.categoryName,
+                        category.id
+        FROM article_category
+                 join
+             category on (article_category.categoryId = category.id)
+        WHERE article_category.articleId = #{articleId}
     </select>
 
 </mapper>

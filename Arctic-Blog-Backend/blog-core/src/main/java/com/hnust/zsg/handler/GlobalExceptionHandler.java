@@ -1,5 +1,6 @@
 package com.hnust.zsg.handler;
 
+import com.hnust.zsg.Excption.validation.ArticleInfoException;
 import com.hnust.zsg.Exception.ServiceLimitException;
 import com.hnust.zsg.Excption.validation.EmailillegalException;
 import com.hnust.zsg.Excption.validation.NoSuchFieldException;
@@ -15,7 +16,6 @@ import org.springframework.web.bind.annotation.RestControllerAdvice;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.time.LocalDate;
 import java.time.format.DateTimeParseException;
 
 /**
@@ -82,10 +82,18 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(value = IllegalArgumentException.class)
     @ResponseStatus(HttpStatus.FORBIDDEN)
-    public Result IllegalArgumentExcptionHandler(HttpServletRequest request, HttpServletResponse response, DateTimeParseException excption) {
+    public Result IllegalArgumentExcptionHandler(HttpServletRequest request, HttpServletResponse response, IllegalArgumentException excption) {
         String message = excption.getMessage();
         log.error("ErrorResult:{}", message);
         return Result.fail(message);
     }
+
+    @ExceptionHandler(value = ArticleInfoException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    public Result ArticleInfoExceptionExcptionHandler(HttpServletRequest request, HttpServletResponse response, ArticleInfoException excption) {
+        String message = excption.getMessage();
+        return Result.fail(message);
+    }
+
 
 }

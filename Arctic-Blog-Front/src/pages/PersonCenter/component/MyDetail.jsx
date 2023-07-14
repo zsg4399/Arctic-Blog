@@ -83,7 +83,7 @@ const MyDetail = () => {
       <Row className={detailStyle.TopContainer}>
         <Col offset={2} span={2}>
           <Avatar
-            src={`/avatar/${userinfo ? userinfo.avatar : ""}`}
+            src={`/static/avatar/${userinfo ? userinfo.avatar : ""}`}
             size={60}
             shape="circle"
             icon={<UserOutlined />}

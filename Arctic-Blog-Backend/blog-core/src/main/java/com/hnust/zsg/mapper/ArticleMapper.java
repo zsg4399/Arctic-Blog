@@ -14,11 +14,12 @@ import java.util.List;
 
 @Mapper
 public interface ArticleMapper extends BaseMapper<ArticlePO>{
-    Page<Long> getAllArticleId(IPage<ArticlePO> page,@Param("order") String order);
+    Page<Long> getAllArticleId(IPage<ArticlePO> page, @Param("order") String order,@Param("userId") Long userId);
+
     @Options(useGeneratedKeys = true,keyColumn = "id",keyProperty = "id")
     Long addArticle(ArticlePO articlePO);
 
-    String getDeleteUrlById(@Param("id") Long id);
+    String getDeleteUrlById(@Param("id") Long id,@Param("authorId")Long authorId);
     ArticlePO getArticleById(@Param("id") Long id);
 
     List<SwiperVO> getSwipperPicture();

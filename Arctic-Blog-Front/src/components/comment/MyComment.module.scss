@@ -23,28 +23,28 @@
   left: 78%;
 }
 
-.commentMain{
+.commentMain {
   color: #bebebe;
   font-size: 16px;
 }
 
-.LikeContainer{
+.LikeContainer {
   color: #fff !important;
 }
 
-.loader{
+.loader {
   padding: 10px;
   display: flex;
   justify-content: center;
 }
 
-.authorName{
+.authorName {
   color: #bebebe;
   font-size: 16px;
   font-weight: 600;
 }
 
-.replyArea{
+.replyArea {
   margin-left: 10px;
   margin-right: 10px;
   box-sizing: border-box;
@@ -54,14 +54,14 @@
   font-size: 16px;
 }
 
-.replyContainer{
+.replyContainer {
   width: 100%;
   box-sizing: border-box;
   height: 7rem;
   display: flex;
 }
 
-.replyButton{
+.replyButton {
   background: linear-gradient(130deg, #24c6dc, #5433ff 41.07%, #ff0099 76.05%);
   height: 2.5rem;
   width: 4rem;
@@ -72,6 +72,59 @@
   margin-bottom: auto;
 }
 
-.commentContent{
+.commentContent {
   letter-spacing: 1px;
+}
+
+@media screen and(max-width:615px) {
+  .mainGrid {
+    display: flex;
+  }
+  .col1 {
+    display: none;
+  }
+}
+@media screen and (max-width:960px) {
+  .AddButton{
+    width: 120px;
+  }
+}
+
+@media screen and (max-width:840px) {
+  .AddButton{
+    width: 100px;
+    font-size: 12px;
+  }
+}
+@media screen and (max-width:720px) and(min-width:615px) {
+  .AddButton{
+    width: 90px;
+    padding: 10px;
+  }
+}
+@media screen and(max-width:515px) {
+}
+
+@media screen and(max-width:480px) {
+  .AddButton{
+    left: 70%;
+  }
+}
+
+@media screen and(max-width:430px) {
+  .AddButton{
+    left: 68%;
+  }
+}
+
+@media screen and(max-width:380px) {
+  .AddButton{
+    left: 60%;
+  }
+}
+
+@media screen and(max-width:330px) {
+  .AddButton{
+    left: 50%;
+  }
 }

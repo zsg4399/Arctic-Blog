@@ -6,6 +6,7 @@
     <select id="getAllArticleId" resultType="Long">
         select id
         from article
+        <if test="userId!=null">where authorId=#{userId}</if>
         order by #{order} desc
     </select>
 
@@ -18,6 +19,7 @@
         select deleteUrl
         from article
         where id = #{id}
+          and authorId = #{authorId}
     </select>
 
     <select id="getArticleById" resultType="ArticlePO">
@@ -36,7 +38,9 @@
     </select>
 
     <select id="getSwipperPicture" resultType="SwiperVO">
-        select imageUrl,id from article order by articleViews limit 4
+        select imageUrl, id
+        from article
+        order by articleViews limit 4
     </select>
 
 

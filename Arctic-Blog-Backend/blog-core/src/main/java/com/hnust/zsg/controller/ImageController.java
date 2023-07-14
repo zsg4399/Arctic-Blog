@@ -3,12 +3,15 @@ package com.hnust.zsg.controller;
 
 import com.hnust.zsg.entity.vo.ImageVO;
 import com.hnust.zsg.enumeration.ResultCodeType;
+import com.hnust.zsg.utils.JacksonUtil;
 import com.hnust.zsg.utils.Result;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.multipart.support.StandardMultipartHttpServletRequest;
+
+import javax.servlet.http.HttpServletRequest;
+import java.io.File;
 
 @RestController
 @RequestMapping("/images")
@@ -17,13 +20,10 @@ public class ImageController {
     private static final String Access_Token="your_smms_token";
 
     @PostMapping("/upload")
-    public Result<ImageVO> uploadImage(){
+    public Result<ImageVO> uploadImage(StandardMultipartHttpServletRequest request){
+     MultipartFile image= request.getFile("smfile");
      return Result.set(new ImageVO("xxx.png","done","wtf","wtf"), ResultCodeType.SUCCESS);
     }
 
-    @GetMapping("/token")
-    public Result<String> getUploadToken(){
-        return Result.set(Access_Token, ResultCodeType.SUCCESS);
-    }
 
 }

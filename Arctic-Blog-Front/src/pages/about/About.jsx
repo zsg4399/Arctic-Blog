@@ -1,9 +1,8 @@
 import React, { useState } from "react";
 import aboutStyle from "./About.module.scss";
-import MyComment from "../../components/comment/MyComment";
+import MyComment, { handleData } from "../../components/comment/MyComment";
 import PersonCard from "../../components/personCard/PersonCard";
 import { addAboutComment, getAboutCommnets } from "../../api/comment";
-import { showDateTime } from "../../utils/DatetimeUtils";
 import { CheckOutlined, QqOutlined } from "@ant-design/icons";
 import { message } from "antd";
 
@@ -17,21 +16,10 @@ const About = () => {
   const loadmore = () => {
     getAboutCommnets(page, pageSize)
       .then((res) => {
-        if (res.data.page.total !== 0)
+        if (!!res.data.page.records)
           setCommentData(
             commentData.concat(
-              res.data.page.records.map((record) => {
-                const CT = record.createTime;
-                record.createTime = showDateTime(CT);
-                if (record.children !== null) {
-                  const length = record.children.length;
-                  for (let i = 0; i < length; i++) {
-                    const CT = record.children[i].createTime;
-                    record.children[i].createTime = showDateTime(CT);
-                  }
-                }
-                return record;
-              })
+              handleData(res.data.page.records)
             )
           );
 

@@ -5,10 +5,7 @@
 <mapper namespace="com.hnust.zsg.mapper.CommentMapper">
     <select id="getCommentAmountByArticleId" resultType="Long">
         select count(*)
-        from comment,
-             article_comment
-        where commentId = article_comment.id
-          and articleId = #{id}
+        from article_comment where articleId = #{id}
     </select>
 
     <insert id="addAboutComment">
@@ -47,7 +44,9 @@
                `comment`.content
         from article_comment,
              `comment`
-        where articleId=#{articleId} and `comment`.pid=0 and commentId=`comment`.id
+        where articleId = #{articleId}
+          and `comment`.pid = 0
+          and commentId = `comment`.id
     </select>
 
     <select id="getReplyByPid" resultType="CommentPO">

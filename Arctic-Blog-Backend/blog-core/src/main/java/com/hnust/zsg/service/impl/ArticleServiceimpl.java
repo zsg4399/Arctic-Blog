@@ -5,34 +5,46 @@ import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.hnust.zsg.Exception.InsertException;
+import com.hnust.zsg.context.user.UserContextHolder;
 import com.hnust.zsg.convert.ArticleConvert;
 import com.hnust.zsg.entity.doc.ArticleDoc;
+import com.hnust.zsg.entity.doc.ArticleEsDOC;
 import com.hnust.zsg.entity.dto.SwiperVO;
+import com.hnust.zsg.entity.dto.UploadResponeDTO;
 import com.hnust.zsg.entity.po.ArticleLikeStarPO;
 import com.hnust.zsg.entity.po.ArticlePO;
 import com.hnust.zsg.entity.po.CategoryPO;
 import com.hnust.zsg.entity.po.TagPO;
-import com.hnust.zsg.entity.vo.ArticleContentVO;
-import com.hnust.zsg.entity.vo.ArticleDetailVO;
-import com.hnust.zsg.entity.vo.ArticleListVO;
-import com.hnust.zsg.entity.vo.UserVO;
+import com.hnust.zsg.entity.vo.*;
+import com.hnust.zsg.http.HttpUtils;
 import com.hnust.zsg.mapper.*;
 import com.hnust.zsg.service.ArticleService;
 import com.hnust.zsg.service.CategoryService;
 import com.hnust.zsg.service.TagService;
+import com.hnust.zsg.utils.ElasticSearchUtil;
+import com.hnust.zsg.utils.JacksonUtil;
 import com.hnust.zsg.utils.RedisUtil;
 import lombok.extern.slf4j.Slf4j;
+import okhttp3.*;
 import org.apache.ibatis.session.ExecutorType;
 import org.apache.ibatis.session.SqlSession;
+import org.elasticsearch.index.query.BoolQueryBuilder;
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.fetch.subphase.highlight.HighlightBuilder;
 import org.mybatis.spring.SqlSessionTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.elasticsearch.core.SearchHits;
+import org.springframework.data.elasticsearch.core.query.NativeSearchQueryBuilder;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Isolation;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
 import java.time.format.DateTimeFormatter;
 import java.util.*;
 import java.util.concurrent.TimeUnit;
@@ -40,7 +52,7 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
-public class ArticleServiceimpl  implements ArticleService {
+public class ArticleServiceimpl implements ArticleService {
 
     @Autowired
     private ArticleMapper articleMapper;
@@ -66,6 +78,9 @@ public class ArticleServiceimpl  implements ArticleService {
     @Autowired
     private SqlSessionTemplate sqlSessionTemplate;
 
+    @Autowired
+    private ElasticSearchUtil elasticSearchUtil;
+
 
     private static final DateTimeFormatter df = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
     private static final String REDIS_ARTICLES = "article";
@@ -79,15 +94,11 @@ public class ArticleServiceimpl  implements ArticleService {
      * @param order
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 100, isolation = Isolation.REPEATABLE_READ)
-    public Page<ArticleListVO> getAllArticle(IPage<ArticlePO> page, String order) {
-
-        Page<Long> page1 = articleMapper.getAllArticleId(page, order);
-
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
+    public Page<ArticleListVO> getAllArticle(IPage<ArticlePO> page, String order,Long userId) {
+        Page<Long> page1 = articleMapper.getAllArticleId(page, order,userId);
         Page<ArticleListVO> article = (Page<ArticleListVO>) page1.convert(this::apply);
         return article;
-
-
     }
 
     /**
@@ -97,6 +108,7 @@ public class ArticleServiceimpl  implements ArticleService {
      * @return
      */
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10, rollbackFor = RuntimeException.class)
     public ArticleDetailVO findArticleById(Long id) {
         ArticlePO articlePO = articleMapper.getArticleById(id);
         ArticleDetailVO articleDetailVO = ArticleConvert.INSTANCE.PO_TO_DETAIL_VO(articlePO);
@@ -109,7 +121,6 @@ public class ArticleServiceimpl  implements ArticleService {
         ArticleDoc articleDoc = mongoTemplate.findById(id, ArticleDoc.class);
         if (articleDoc != null) {
             articleDetailVO.setArticleRaw(articleDoc.getArticle_raw());
-            articleDetailVO.setArticleHtml(articleDoc.getArticle_html());
         }
 
         return articleDetailVO;
@@ -122,17 +133,47 @@ public class ArticleServiceimpl  implements ArticleService {
      * @param articleContentVO
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 100, isolation = Isolation.REPEATABLE_READ)
-    public void addArticle(ArticleContentVO articleContentVO) throws RuntimeException {
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 480*100, isolation = Isolation.READ_COMMITTED)
+    public void addArticle(MultipartFile imageFile, ArticleContentVO articleContentVO) throws RuntimeException {
+        String imageUrl = "";
+        String deleteUrl = "";
+        if (imageFile != null) {
+            okhttp3.RequestBody body = null;
+            try {
+                body = new MultipartBody.Builder().setType(MultipartBody.FORM)
+                        .addFormDataPart("smfile", imageFile.getOriginalFilename(),
+                                okhttp3.RequestBody.create(MediaType.parse("application/octet-stream"),
+                                        imageFile.getBytes()))
+                        .build();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            Response response = HttpUtils.uploadImage(body, 3);
+
+            String responeString = null;
+            try {
+                responeString = response.body().string();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+            UploadResponeDTO uploadResponeDTO = JacksonUtil.parseObject(responeString, UploadResponeDTO.class);
+            if(uploadResponeDTO.getSuccess()!=null&&uploadResponeDTO.getSuccess()){
+                imageUrl = uploadResponeDTO.getData().getUrl();
+                deleteUrl = uploadResponeDTO.getData().getDelete();
+            }
+        }
+
         ArticlePO articlePO = ArticleConvert.INSTANCE.ARTICLE_CONTENTVO_TO_ArticlePO(articleContentVO);
+        articlePO.setImageUrl(imageUrl);
+        articlePO.setDeleteUrl(deleteUrl);
         articleMapper.insert(articlePO);
         Long articleId = articlePO.getId();
         if (articleId > 0) {
-            ArticleDoc articleDoc = new ArticleDoc(articleId, articleContentVO.getArticleRaw(), articleContentVO.getArticleHtml());
+            ArticleDoc articleDoc = new ArticleDoc(articleId, articleContentVO.getArticleRaw());
             mongoTemplate.insert(articleDoc, "article_content");
             try {
                 if (articleContentVO.getTags() != null) {
-                    tagService.insertTagsByArticleId(articleId, articleContentVO.getTags(),articleContentVO.getAuthorId());
+                    tagService.insertTagsByArticleId(articleId, articleContentVO.getTags(), articleContentVO.getAuthorId());
                 }
                 if (articleContentVO.getCategorys() != null) {
                     categoryService.insertCategorysByArticleId(articleId, articleContentVO.getCategorys(), articleContentVO.getAuthorId());
@@ -157,18 +198,24 @@ public class ArticleServiceimpl  implements ArticleService {
      * @param id
      */
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     public String deleteArticleById(Long id) {
-        String deleteUrl = articleMapper.getDeleteUrlById(id);
+        Long authorId = UserContextHolder.getContext().getMyUserVO().getId();
+        String deleteUrl = articleMapper.getDeleteUrlById(id, authorId);
         if (deleteUrl == null) {
             return null;
         }
-        articleMapper.deleteById(id);
 
-        LambdaQueryWrapper<TagPO> queryWrapper = new LambdaQueryWrapper<>();
-        queryWrapper.eq(TagPO::getArticleId, id);
-        tagService.remove(queryWrapper);
+        LambdaQueryWrapper<ArticlePO> queryWrapper1 = new LambdaQueryWrapper();
+        queryWrapper1.eq(ArticlePO::getAuthorId, authorId);
+        queryWrapper1.eq(ArticlePO::getId, id);
+        articleMapper.delete(queryWrapper1);
+
+        LambdaQueryWrapper<TagPO> queryWrapper2 = new LambdaQueryWrapper<>();
+        queryWrapper2.eq(TagPO::getArticleId, id);
+        tagService.remove(queryWrapper2);
         categoryService.removeArticleCategorys(id);
+        //删除对应文章的文字内容
         Query query = new Query(Criteria.where("_id").is(id));
         mongoTemplate.remove(query, ArticleDoc.class);
         return deleteUrl;
@@ -287,10 +334,53 @@ public class ArticleServiceimpl  implements ArticleService {
     }
 
     @Override
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10, rollbackFor = RuntimeException.class)
     public void SwipperToRedis() {
-        List<SwiperVO> pictures=articleMapper.getSwipperPicture();
+        List<SwiperVO> pictures = articleMapper.getSwipperPicture();
 
-        RedisUtil.hset(RedisUtil.HOME_SWIPPER_4,pictures,1L, TimeUnit.DAYS);
+        RedisUtil.hset(RedisUtil.HOME_SWIPPER_4, pictures, 1L, TimeUnit.DAYS);
+    }
+
+    @Override
+    public ArticleSearchVO searchArticle(String message) {
+        NativeSearchQueryBuilder builder = new NativeSearchQueryBuilder();
+
+        HighlightBuilder highlightBuilder = new HighlightBuilder()
+                .field("summary")
+                .field("content")
+                .field("title")
+                //设置关键字只读取25字的上下文
+                .fragmentSize(25)
+                //设置某个字段未匹配到的情况下，返回的最大字数，初始化默认值是0
+                .noMatchSize(10)
+                //设置最多只读取一条关键字
+                .numOfFragments(1)
+                .preTags("<mark>")
+                .postTags("</mark>");
+
+        builder.withHighlightBuilder(highlightBuilder);
+        //设置最多返回五条记录
+        builder.withPageable(PageRequest.of(0, 5));
+        //构建查询条件
+        BoolQueryBuilder boolQuery = QueryBuilders.boolQuery().must(QueryBuilders.multiMatchQuery(message, "summary", "content", "title"));
+        builder.withQuery(boolQuery);
+        SearchHits<ArticleEsDOC> response = elasticSearchUtil.search(builder.build(), ArticleEsDOC.class);
+        List<ArticleEsDOC> articles=new ArrayList<>((int)response.getTotalHits());
+        response.get().forEach(e->
+                {
+                    Map<String,List<String>> highLight=e.getHighlightFields();
+                    ArticleEsDOC article=new ArticleEsDOC();
+                    article.setId(e.getContent().getId());
+                    article.setContent(highLight.get("content").get(0));
+                    article.setSummary(highLight.get("summary").get(0));
+                    article.setTitle(highLight.get("title").get(0));
+                    articles.add(article);
+                }
+                );
+        ArticleSearchVO result=new ArticleSearchVO();
+        result.setArticles(articles);
+        result.setTotal(response.getTotalHits());
+        return result;
     }
 
     private ArticleListVO apply(Long id) {

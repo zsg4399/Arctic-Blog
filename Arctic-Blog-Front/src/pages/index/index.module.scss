@@ -2,7 +2,7 @@
   width: 100%;
 }
 
-.item:hover{
+.item:hover {
   cursor: pointer;
 }
 .headContainer {
@@ -12,8 +12,20 @@
   display: flex;
   align-items: center;
   box-sizing: border-box;
-  background: linear-gradient(130deg, rgb(36, 198, 220), rgb(84, 51, 255) 41.07%, rgb(255, 0, 153) 76.05%);
+  background: linear-gradient(
+    130deg,
+    rgb(36, 198, 220),
+    rgb(84, 51, 255) 41.07%,
+    rgb(255, 0, 153) 76.05%
+  );
   color-scheme: light;
+}
+.EditorButton {
+  box-sizing: border-box;
+  width: 80%;
+  height: 100%;
+  letter-spacing: 0.2px;
+  padding: 5px;
 }
 .navlinknone {
   text-decoration: none;
@@ -23,7 +35,7 @@
 }
 .footContainer {
   width: 100%;
-  height: 10%;
+  height: 70px;
   box-sizing: border-box;
   color: #99979c;
   background-color: #1c1f21;
@@ -44,18 +56,23 @@
   margin-right: auto;
   box-sizing: border-box;
   justify-content: center;
-  background: linear-gradient(130deg, rgb(36, 198, 220)15.56%, rgb(84, 51, 255) 41.07%, rgb(255, 0, 153) 76.05%);
+  background: linear-gradient(
+    130deg,
+    rgb(36, 198, 220) 15.56%,
+    rgb(84, 51, 255) 41.07%,
+    rgb(255, 0, 153) 76.05%
+  );
 }
 
 .mainContent {
-  width: 1140px;
+  width: 100%;
   box-sizing: border-box;
   display: flex;
   flex-wrap: wrap;
   justify-content: center;
 }
 .registerCard {
-  height: 520px;
+  min-height: 450px;
   width: 474px;
   margin-top: 30px;
   margin-bottom: 50px;
@@ -69,18 +86,16 @@
 .cardHeader {
   padding-top: 5px;
   height: 48px;
-  width: 474px;
+  width: 100%;
   box-sizing: border-box;
 }
-.hrStyle {
-  width: 434px;
+.borderStyle {
   height: 1px;
+  width: 80%;
+  margin: 0 auto;
   opacity: 30%;
-  margin-left: 20px;
-  margin-right: 20px;
-  color: #987cb9;
+  background-color: #987cb9 !important;
 }
-
 .headerfont {
   width: 80px;
   margin: 0 auto;
@@ -89,9 +104,12 @@
   font-weight: 400;
 }
 .cardMain {
+  padding-left: 15px;
+  padding-right: 15px;
   margin-top: 30px;
-  width: 474px;
-  height: 400px;
+  width: 100%;
+  min-height: 350px;
+  box-sizing: border-box;
 }
 .loginCard {
   @extend .registerCard;
@@ -99,19 +117,21 @@
   height: 420px;
 }
 
+.submitButton {
+  margin-left: 240px;
+}
 .HomePageContainer {
-  width: 100%;
   display: grid;
-  grid-template-columns: 65% 35%;
+  box-sizing: border-box;
 }
 
 .leftContainer {
-  width: 760px;
+  width: 100%;
   padding-left: 15px;
   padding-right: 15px;
   box-sizing: border-box;
 }
-.rightContainer{
+.rightContainer {
   height: 100%;
   width: 100%;
   display: flex;
@@ -122,7 +142,7 @@
 }
 .swipper {
   margin-top: 5px;
-  width: 726px;
+  width: 100%;
   height: 363px;
   box-sizing: border-box;
   border-radius: 5px;
@@ -146,19 +166,27 @@
 }
 
 .tableItem {
+  width: 100%;
+  max-width: 100%;
   height: 230px;
   display: flex;
   box-sizing: border-box;
   background-color: #fff;
   padding: 8px;
+  border: 1px solid #f0f0f2;
 }
 
 .ImageStyle {
-  width: 180px;
-  height: 160px;
-  margin-top: 25px;
-  margin-bottom: 25px;
-  margin-left: 10px;
+  box-sizing: border-box;
+  width: 25%;
+  height: 100%;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  margin-left: 5px;
+  margin-right: 5px;
+}
+.ImageContainer{
+  height: 180px;
 }
 
 .profilePhoto {
@@ -181,21 +209,16 @@
   font-weight: 500;
   height: 30px;
   color: #222226;
-  overflow: hidden;
   word-break: break-word;
-  .titleContainer{
-    width: 375px;
-    height: 100%;
-    line-height: 30px;
-    display: inline-block;
-    overflow: hidden;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-  }
-
+  height: 100%;
+  line-height: 30px;
+  display: inline-block;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
-.ContentHeader{
+.ContentHeader {
   width: 100%;
   box-sizing: border-box;
   height: 30px;
@@ -217,7 +240,7 @@
   box-sizing: border-box;
 }
 
-.logoAndFont{
+.logoAndFont {
   color: rgb(157, 157, 157);
   margin-right: 5px;
 }
@@ -229,15 +252,454 @@
   margin-top: 35px;
 }
 
-.highlightLike{
+.highlightLike {
   font-size: 150%;
   color: rgb(252, 85, 49);
 }
 
-.paginationStyle{
-  color: rgb(33,33,33);
+.paginationStyle {
+  color: rgb(33, 33, 33);
   font-size: 18px;
   font-weight: 500;
   margin-top: 10px;
   margin-bottom: 5px;
+}
+
+.noRecentRecord {
+  text-align: center;
+  line-height: 100px;
+  text-justify: auto;
+  font-size: 0.9em;
+  color: rgba(0, 0, 0, 0.45);
+}
+
+.searchTable {
+  min-height: 100px;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.45);
+  box-sizing: border-box;
+  position: relative;
+  .searchLoading {
+    position: absolute;
+    left: 45%;
+  }
+}
+.searchFooter {
+  height: 44px;
+  width: 100%;
+  box-sizing: border-box;
+  align-items: center;
+  background: var(--docsearch-footer-background);
+  border-radius: 0 0 8px 8px;
+  box-shadow: var(--docsearch-footer-shadow);
+  display: flex;
+  flex-direction: row-reverse;
+  flex-shrink: 0;
+  height: var(--docsearch-footer-height);
+  justify-content: space-between;
+  padding: 0 var(--docsearch-spacing);
+  position: relative;
+  -webkit-user-select: none;
+  -moz-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  z-index: 300;
+}
+
+.searchLogo {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  --antd-wave-shadow-color: var(--ant-primary-color);
+  --scroll-bar: 0;
+  --ant-primary-color: #1890ff;
+  --ant-primary-color-hover: #40a9ff;
+  --ant-primary-color-active: #096dd9;
+  --ant-primary-color-outline: rgba(24, 144, 255, 0.2);
+  --ant-primary-1: #e6f7ff;
+  --ant-primary-2: #bae7ff;
+  --ant-primary-3: #91d5ff;
+  --ant-primary-4: #69c0ff;
+  --ant-primary-5: #40a9ff;
+  --ant-primary-6: #1890ff;
+  --ant-primary-7: #096dd9;
+  --ant-primary-color-deprecated-pure: ;
+  --ant-primary-color-deprecated-l-35: #cbe6ff;
+  --ant-primary-color-deprecated-l-20: #7ec1ff;
+  --ant-primary-color-deprecated-t-20: #46a6ff;
+  --ant-primary-color-deprecated-t-50: #8cc8ff;
+  --ant-primary-color-deprecated-f-12: rgba(24, 144, 255, 0.12);
+  --ant-primary-color-active-deprecated-f-30: rgba(230, 247, 255, 0.3);
+  --ant-primary-color-active-deprecated-d-02: #dcf4ff;
+  --ant-success-color: #52c41a;
+  --ant-success-color-hover: #73d13d;
+  --ant-success-color-active: #389e0d;
+  --ant-success-color-outline: rgba(82, 196, 26, 0.2);
+  --ant-success-color-deprecated-bg: #f6ffed;
+  --ant-success-color-deprecated-border: #b7eb8f;
+  --ant-error-color: #ff4d4f;
+  --ant-error-color-hover: #ff7875;
+  --ant-error-color-active: #d9363e;
+  --ant-error-color-outline: rgba(255, 77, 79, 0.2);
+  --ant-error-color-deprecated-bg: #fff2f0;
+  --ant-error-color-deprecated-border: #ffccc7;
+  --ant-warning-color: #faad14;
+  --ant-warning-color-hover: #ffc53d;
+  --ant-warning-color-active: #d48806;
+  --ant-warning-color-outline: rgba(250, 173, 20, 0.2);
+  --ant-warning-color-deprecated-bg: #fffbe6;
+  --ant-warning-color-deprecated-border: #ffe58f;
+  --ant-info-color: #1890ff;
+  --ant-info-color-deprecated-bg: #e6f7ff;
+  --ant-info-color-deprecated-border: #91d5ff;
+  direction: initial;
+  --docsearch-spacing: 12px;
+  --docsearch-icon-stroke-width: 1.4;
+  --docsearch-logo-color: #5468ff;
+  --docsearch-modal-width: 560px;
+  --docsearch-modal-height: 600px;
+  --docsearch-modal-shadow: inset 1px 1px 0 0 hsla(0, 0%, 100%, 0.5),
+    0 3px 8px 0 #555a64;
+  --docsearch-searchbox-height: 56px;
+  --docsearch-hit-height: 56px;
+  --docsearch-hit-shadow: 0 1px 3px 0 #d4d9e1;
+  --docsearch-key-gradient: linear-gradient(-225deg, #d5dbe4, #f8f8f8);
+  --docsearch-key-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
+    0 1px 2px 1px rgba(30, 35, 90, 0.4);
+  --docsearch-footer-height: 44px;
+  --docsearch-footer-shadow: 0 -1px 0 0 #e0e3e8,
+    0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+  color-scheme: light;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  font-feature-settings: "tnum";
+  color: #000000d9;
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  --docsearch-primary-color: var(--ant-primary-color);
+  --docsearch-text-color: rgba(0, 0, 0, 0.85);
+  --docsearch-muted-color: rgba(0, 0, 0, 0.45);
+  --docsearch-container-background: rgba(0, 0, 0, 0.45);
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--ant-primary-color);
+  --docsearch-modal-background: #fff;
+  --docsearch-searchbox-background: #fff;
+  --docsearch-searchbox-focus-background: #fff;
+  --docsearch-footer-background: #fff;
+  --docsearch-hit-background: #fff;
+  --docsearch-hit-color: var(--ant-primary-color);
+  --docsearch-hit-active-color: #fff;
+  --docsearch-highlight-color: var(--ant-primary-color);
+  --docsearch-vh: 7.11px;
+  user-select: none;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+.searchCommands {
+  -webkit-text-size-adjust: 100%;
+  -webkit-tap-highlight-color: rgba(0, 0, 0, 0);
+  direction: initial;
+  --docsearch-searchbox-height: 56px;
+  --docsearch-hit-height: 56px;
+  --docsearch-hit-shadow: 0 1px 3px 0 #d4d9e1;
+  --docsearch-key-gradient: linear-gradient(-225deg, #d5dbe4, #f8f8f8);
+  --docsearch-key-shadow: inset 0 -2px 0 0 #cdcde6, inset 0 0 1px 1px #fff,
+    0 1px 2px 1px rgba(30, 35, 90, 0.4);
+  --docsearch-footer-height: 44px;
+  --docsearch-footer-shadow: 0 -1px 0 0 #e0e3e8,
+    0 -3px 6px 0 rgba(69, 98, 155, 0.12);
+  color-scheme: light;
+  font-variant: tabular-nums;
+  line-height: 1.5715;
+  font-feature-settings: "tnum";
+  font-size: 14px;
+  font-family: -apple-system, BlinkMacSystemFont, Segoe UI, Roboto,
+    Helvetica Neue, Arial, Noto Sans, sans-serif, "Apple Color Emoji",
+    "Segoe UI Emoji", Segoe UI Symbol, "Noto Color Emoji";
+  --docsearch-primary-color: var(--ant-primary-color);
+  --docsearch-text-color: rgba(0, 0, 0, 0.85);
+  --docsearch-muted-color: rgba(0, 0, 0, 0.45);
+  --docsearch-container-background: rgba(0, 0, 0, 0.45);
+  --docsearch-searchbox-shadow: inset 0 0 0 2px var(--ant-primary-color);
+  --docsearch-modal-background: #fff;
+  --docsearch-searchbox-background: #fff;
+  --docsearch-searchbox-focus-background: #fff;
+  --docsearch-footer-background: #fff;
+  --docsearch-hit-background: #fff;
+  --docsearch-hit-color: var(--ant-primary-color);
+  --docsearch-hit-active-color: #fff;
+  --docsearch-highlight-color: var(--ant-primary-color);
+  --docsearch-vh: 6.55px;
+  user-select: none;
+  box-sizing: border-box;
+  color: var(--docsearch-muted-color);
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  width: 290px;
+}
+.searchCommandLogo {
+  align-items: center;
+  background: var(--docsearch-key-gradient);
+  border-radius: 2px;
+  box-shadow: var(--docsearch-key-shadow);
+  display: flex;
+  height: 18px;
+  justify-content: center;
+  padding: 0 0 1px;
+  color: var(--docsearch-muted-color);
+  border: 0;
+  width: 20px;
+  margin-right: 0.5rem;
+}
+
+.esFont {
+  font-size: 18px;
+  color: #0fb6d6;
+  color-scheme: light;
+}
+.searchLabel {
+  box-sizing: border-box;
+  color: var(--docsearch-muted-color);
+  font-size: 0.75em;
+  line-height: 1.6em;
+  margin-right: 0.5rem;
+}
+
+.recordStyle {
+  color: #1890ff;
+  border-radius: 5px;
+  box-sizing: border-box;
+  border: 1px solid red;
+  padding: 5px;
+  height: 86.6px;
+  display: flex;
+  margin-bottom: 5px;
+}
+.recordIcon {
+  width: 40px;
+  height: 100%;
+  display: flex;
+  align-items: center;
+}
+.searchHitIcon {
+  font-size: 40px;
+  height: 40px;
+}
+.recordTitle {
+  display: flex;
+  line-height: 20px;
+  width: 440px;
+  box-sizing: border-box;
+}
+.recordSummary {
+  display: flex;
+  color: #0d0b12;
+  line-height: 20px;
+  width: 440px;
+  box-sizing: border-box;
+}
+.recordContent {
+  display: flex;
+  color: rgba(0, 0, 0, 0.45);
+  font-size: 0.75em;
+  width: 440px;
+  line-height: 20px;
+  box-sizing: border-box;
+}
+
+.recordStyle[aria-selected="true"] {
+  background-color: rgb(24, 144, 255);
+  color: #ffffff;
+  .recordContent {
+    color: #ffffff;
+  }
+  .recordSummary {
+    color: #ffffff;
+  }
+}
+@media screen and (max-width: 324px) {
+  .HomePageContainer {
+    width: 100%;
+  }
+  .ImageContainer{
+    display: none;
+  }
+  .ImageStyle{
+    display: none;
+  }
+  .tableItemMaincontent {
+    width: 100%;
+  }
+  .tableItem{
+    width: 100%;
+  }
+  .registerCard {
+    width: 280px;
+  }
+
+  .borderStyle {
+    width: 240px;
+    margin-left: 15px;
+    margin-right: 5px;
+  }
+  .submitButton {
+    margin-left: 180px;
+  }
+  .swipper{
+    height: 150px;
+  }
+  .contentFooter{
+    font-size: 8px;
+  }
+}
+@media screen and(min-width:324px) and (max-width: 414px) {
+  .HomePageContainer {
+    width: 100%;
+  }
+  .tableItemMaincontent {
+    width: 160px;
+  }
+  .registerCard {
+    width: 280px;
+  }
+  .contentFooter{
+    font-size: 10px;
+  }
+  .borderStyle {
+    width: 240px;
+    margin-left: 15px;
+    margin-right: 5px;
+  }
+  .submitButton {
+    margin-left: 180px;
+  }
+  .swipper{
+    height: 180.7px;
+  }
+  .ImageContainer{
+    height: 150px;
+  }
+  .tableItem{
+    height: 150px;
+  }
+  .contentFooter{
+    margin-top: 0;
+  }
+  .articleTitle{
+    width: 30%;
+  }
+  .SummaryContainer{
+    height: 50px;
+  }
+  
+}
+
+@media screen and (min-width: 414px) and (max-width: 568px) {
+  .navlinknone {
+    font-size: 14px;
+  }
+  .articleTitle {
+    width: 100px;
+  }
+  .HomePageContainer {
+    width: 100%;
+  }
+  .tableItemMaincontent {
+    width: 100%;
+  }
+  .tableItem {
+    height: 180px;
+  }
+  .registerCard {
+    width: 380px;
+  }
+  .borderStyle {
+    width: 340px;
+    margin-left: 15px;
+    margin-right: 5px;
+  }
+  .swipper {
+    height: 225.73px;
+  }
+  .ImageContainer{
+    height: 150px;
+  }
+  .contentFooter{
+    margin-top: 5px;
+  }
+}
+
+@media screen and (min-width: 568px) {
+  .HomePageContainer {
+    width: 608px;
+  }
+  .swipper {
+    height: 340.33px;
+  }
+
+  .tableItemMaincontent {
+    width: 275px;
+  }
+}
+@media screen and(min-width:324px)  and(max-width:768px) {
+  .HomePageContainer {
+    padding-left: 15px;
+    padding-right: 15px;
+  }
+  .EditorButton {
+    font-size: 8px;
+  }
+  .ImageStyle {
+    width: 140px;
+  }
+  .tableItemMaincontent {
+    width: 70%;
+  }
+}
+@media screen and (min-width: 768px) {
+  .HomePageContainer {
+    width: 728px;
+  }
+  .tableItemMaincontent {
+    width: 450.76px;
+  }
+  .EditorButton {
+    font-size: 8px;
+  }
+}
+@media screen and(max-width:996px) {
+  .HomePageContainer {
+    display: flex;
+  }
+  .rightContainer {
+    display: none;
+  }
+}
+@media screen and (min-width: 996px) {
+  .HomePageContainer {
+    width: 966px;
+    display: grid;
+    grid-template-columns: 625.03px 350.17px;
+  }
+  .tableItemMaincontent {
+    width: 379px;
+  }
+  .EditorButton {
+    font-size: 10px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  .HomePageContainer {
+    width: 1140px;
+    grid-template-columns: 741px 399px;
+  }
+  .tableItemMaincontent {
+    width: 484px;
+  }
+  .EditorButton {
+    font-size: 12px;
+  }
 }

@@ -8,17 +8,19 @@ import com.hnust.zsg.entity.po.ArticlePO;
 import com.hnust.zsg.entity.vo.ArticleContentVO;
 import com.hnust.zsg.entity.vo.ArticleDetailVO;
 import com.hnust.zsg.entity.vo.ArticleListVO;
+import com.hnust.zsg.entity.vo.ArticleSearchVO;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.Collection;
 
 
 public interface ArticleService {
-    Page<ArticleListVO> getAllArticle(IPage<ArticlePO> page, String order) ;
+    Page<ArticleListVO> getAllArticle(IPage<ArticlePO> page, String order,Long userId) ;
 
     ArticleDetailVO findArticleById(Long id);
 
 
-    void addArticle(ArticleContentVO articleContentVO) throws RuntimeException;
+    void addArticle(MultipartFile image, ArticleContentVO articleContentVO) throws RuntimeException;
 
     String deleteArticleById(Long id);
 
@@ -31,4 +33,6 @@ public interface ArticleService {
     Boolean articleLikeStarSaveOrUpdateBatch(Collection<ArticleLikeStarPO> collection);
 
     void SwipperToRedis();
+
+    ArticleSearchVO searchArticle(String message);
 }

@@ -5,9 +5,9 @@ import { getArticleById } from "../../api/article";
 import { useSearchParams } from "react-router-dom";
 import { ClockCircleFilled, EyeFilled, StarFilled } from "@ant-design/icons";
 import { addArticleComment, getArticleCommnets } from "../../api/comment";
-import MyComment from "../comment/MyComment";
-import { showDateTime } from "../../utils/DatetimeUtils";
-
+import MyComment, { handleData } from "../comment/MyComment";
+import "braft-editor/dist/output.css";
+import BraftEditor from "braft-editor";
 const ArticleContent = () => {
   const [page, setPage] = useState(1);
   const [pageSize] = useState(5);
@@ -20,7 +20,6 @@ const ArticleContent = () => {
     imageUrl: "",
     summary: "",
     articleRaw: "",
-    articleHtml: "",
     author: { id: "", username: "", avatar: "" },
     createTime: "",
     articleStars: 0,
@@ -35,25 +34,8 @@ const ArticleContent = () => {
   const loadmore = () => {
     getArticleCommnets(page, pageSize, articleId)
       .then((res) => {
-        setCommentData(
-          commentData.concat(
-            res.data.page.records.map((record) => {
-              const CT = record.createTime;
-              record.createTime = showDateTime(CT);
-              if (
-                record.children !== null &&
-                typeof record.children !== "undefined"
-              ) {
-                const length = record.children.length;
-                for (let i = 0; i < length; i++) {
-                  const CT = record.children[i].createTime;
-                  record.children[i].createTime = showDateTime(CT);
-                }
-              }
-              return record;
-            })
-          )
-        );
+        if (!!res.data.page.records)
+          setCommentData(commentData.concat(handleData(res.data.page.records)));
 
         setPage(page + 1);
         setHasmore(res.data.hasmore);
@@ -67,7 +49,6 @@ const ArticleContent = () => {
   useEffect(() => {
     getArticleById(articleId)
       .then((res) => {
-        console.log(res);
         setArticle(res.data.data);
       })
       .catch((err) => {
@@ -98,22 +79,34 @@ const ArticleContent = () => {
             <StarFilled className={indexstyle.antIcon} />
             {article.articleStars}
           </Col>
-          <Col className={indexstyle.line2Col}>
-            <span>分类专栏:</span>
-            {article.categorys.map((category) => {
-              return <span className="my-category" key={category.id}>{category.categoryName}</span>;
-            })}
-          </Col>
+          {!!article.categorys && (
+            <Col className={indexstyle.line2Col}>
+              <span>分类专栏:</span>
+              {article.categorys.map((category) => {
+                return (
+                  <span className="my-category" key={category.id}>
+                    {category.categoryName}
+                  </span>
+                );
+              })}
+            </Col>
+          )}
           <Col className={indexstyle.line2Col}>
             <span>文章标签:</span>
-            {article.tags.map(tag=>{
-              return <span className="my-tag" key={tag.id}>{tag.tagName}</span>
+            {article.tags.map((tag) => {
+              return (
+                <span className="my-tag" key={tag.id}>
+                  {tag.tagName}
+                </span>
+              );
             })}
           </Col>
         </Row>
         <Row
-          className={indexstyle.contentContainer}
-          dangerouslySetInnerHTML={{ __html: article.articleHtml }}
+          className={`${indexstyle.contentContainer} braft-output-content`}
+          dangerouslySetInnerHTML={{
+            __html: BraftEditor.createEditorState(article.articleRaw).toHTML(),
+          }}
         ></Row>
         <Row className={indexstyle.extraContainer}></Row>
       </div>

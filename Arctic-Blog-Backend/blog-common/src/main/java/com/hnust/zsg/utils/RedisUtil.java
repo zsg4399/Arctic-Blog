@@ -23,6 +23,7 @@ public final class RedisUtil {
 
     @Autowired
     public void setRedisTemplate(RedisTemplate redisTemplate) {
+
         RedisUtil.redisTemplate = redisTemplate;
     }
 

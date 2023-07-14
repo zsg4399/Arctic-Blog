@@ -3,16 +3,11 @@ const { createProxyMiddleware } = require("http-proxy-middleware");
 //配置代理
 module.exports = function (app) {
   app.use(
-    createProxyMiddleware("/api", {
+    //开发环境下配置代理跨域
+    createProxyMiddleware("/api1", {
       target: "http://localhost:8001",
       changeOrigin: true,
-      pathRewrite: { api: "" },
+      pathRewrite: { api1: "" },
     }),
-    createProxyMiddleware("/smms", {
-      target: "https://smms.app/api/v2/",
-      changeOrigin: true,
-      pathRewrite: { smms: "" },
-      secure:true
-    })
   );
 };

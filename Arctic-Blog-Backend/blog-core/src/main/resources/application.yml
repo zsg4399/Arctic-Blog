@@ -3,23 +3,8 @@ server:
 spring:
   datasource:
     druid:
-      password: yourPass
       driver-class-name: com.mysql.cj.jdbc.Driver
-      username: root
       url: jdbc:mysql://localhost:3306/blog?useUnicode=true&characterEncoding=utf-8&useSSL=false&serverTimezone=GMT%2B8&rewriteBatchedStatements=true
-
-  redis:
-    host: cq   #服务提供的主机号，可以用域名
-    port: 6379   #端口号
-    password: yourpass     #redis的密码
-    database: 0            #数据库索引，默认为0
-    connect-timeout: 30s   #连接等待的最大超时时间
-    lettuce: #线程安全，比jedis更适合高并发环境,且是springboot内置默认使用的
-      pool:
-        max-active: 14    #设置最大连接数，大于Cpu*2,通常为CPU*2+2
-        max-idle: 12      #最大空闲连接数 CPU*2
-        min-idle: 0      #最小空闲连接数
-        max-wait: 5s     #连接池资源耗尽时，任务申请资源最大的阻塞时间,超时将抛出异常JedisConnectionException
 
   mail:
     host: smtp.qq.com  #设置邮箱类型
@@ -28,14 +13,10 @@ spring:
     default-encoding: UTF-8
   data:
     mongodb:
-      port: 27017   #配置端口号
-      host: cq   #设置MongoDB安装的的主机号
       database: blog_article        #mongodb数据库名
   jackson:
     date-format: yyyy-MM-dd HH:mm:ss
     time-zone: GMT%2B8
-
-
 
 mybatis-plus:
   mapper-locations: mapper/*.xml

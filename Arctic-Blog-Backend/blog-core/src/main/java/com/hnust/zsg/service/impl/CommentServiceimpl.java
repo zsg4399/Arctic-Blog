@@ -36,7 +36,7 @@ public class CommentServiceimpl extends ServiceImpl<CommentMapper, CommentPO> im
     private UserMapper userMapper;
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     public int addAboutComment(CommentPO commentPO) {
         commentMapper.addComment(commentPO);
         Long commentId = commentPO.getId();
@@ -44,7 +44,7 @@ public class CommentServiceimpl extends ServiceImpl<CommentMapper, CommentPO> im
     }
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     public int addArticleComment(CommentPO commentPO, Long articleId) {
         commentMapper.addComment(commentPO);
         Long commentId = commentPO.getId();
@@ -52,21 +52,21 @@ public class CommentServiceimpl extends ServiceImpl<CommentMapper, CommentPO> im
     }
 
     @Override
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 10, isolation = Isolation.READ_COMMITTED)
     public int addTalkComment(CommentPO commentPO, Long talkId) {
         commentMapper.addComment(commentPO);
         Long commentId = commentPO.getId();
         return commentMapper.addTalkComment(talkId, commentId);
     }
 
-    @Transactional(rollbackFor = RuntimeException.class, timeout = 5, isolation = Isolation.REPEATABLE_READ)
+    @Transactional(rollbackFor = RuntimeException.class, timeout = 5, isolation = Isolation.READ_COMMITTED)
     @Override
     public IPage<CommentVO> getAboutComment(IPage<CommentPO> page) {
         IPage<CommentPO> page1 = commentMapper.getAboutComment(page);
         return page1.convert(this::apply);
     }
 
-    @Transactional(isolation = Isolation.REPEATABLE_READ, timeout = 10, rollbackFor = RuntimeException.class)
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10, rollbackFor = RuntimeException.class)
     @Override
     public int addCommentReply(CommentPO commentPO) {
         commentPO = ValidataUtil.validComment(commentPO);
@@ -74,6 +74,7 @@ public class CommentServiceimpl extends ServiceImpl<CommentMapper, CommentPO> im
         return result;
     }
 
+    @Transactional(isolation = Isolation.READ_COMMITTED, timeout = 10, rollbackFor = RuntimeException.class)
     @Override
     public IPage<CommentVO> getArticleComment(IPage page1, Long articleId) {
 

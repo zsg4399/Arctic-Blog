@@ -21,7 +21,7 @@ function Register() {
     <div className={indexStyle.registerCard}>
       <div className={indexStyle.cardHeader}>
         <p className={indexStyle.headerfont}>注册</p>
-        <hr className={indexStyle.hrStyle} />
+        <div className={indexStyle.borderStyle}/>
       </div>
       <div className={indexStyle.cardMain}>
         <Form
@@ -157,7 +157,7 @@ function Register() {
           >
             <NavLink to={"/index/login"}>已有账号登录</NavLink>
             <Button
-              style={{ marginLeft: 240 }}
+              className={indexStyle.submitButton}
               htmlType="submit"
               type="primary"
             >
