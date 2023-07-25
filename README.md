@@ -1,22 +1,29 @@
 # 欢迎使用北极风的个人博客系统
->  穷学生一枚，暂时没花钱买服务器域名，后续购买好了会部署到线上，同时也会一直增加维护新功能
+>  项目预览链接：[北极风的个人网站](https://arctic-zsg.fun)
+
+
+
+**ps:由于白嫖的阿里云的服务器内存不够，elasticsearch线上服务只能选择关闭以维持项目其他功能能正常运行，故将导致搜索功能线上无法使用，有需要研究的可以将项目拉到本地自己装好环境运行**
+
 ## 技术选型汇总
+
 ### 1.后端技术
 
-|            技术            |                             说明                             |   版本号    |
-| :------------------------: | :----------------------------------------------------------: | :---------: |
-|         springboot         |      Java的web开发框架，通过注解的形式简化了繁琐的配置       |   2.6.11    |
-|       spring-securiy       |       一个功能强大且高度可定制的身份验证和访问控制框架       |   2.6.11    |
-|           lombok           | 通过注解的形式自动生成构造器、getter/setter、equals、toString等方法，简化开发 |   1.18.24   |
-|        mybatis-plus        | mybatis的增强版，内置了分页插件，同时编译期生成了一些简单的单表操作方法 |    3.4.2    |
-|           druid            | 阿里巴巴开源的数据库连接池项目，功能强大，性能优秀，是Java语言最好的数据库连接池之一 |   1.1.23    |
-|            jjwt            | 用于生成jwt保存用户登录状态，前端每次将其放在请求头里供后端校验 |    0.9.0    |
-|       commons-pool2        | springboot使用lettuce作为Redis客户端开启连接池需要依赖commons-pool2 |   2.11.1    |
-|         Mapstruct          | Java对象映射转换框架，编译期生成两个对象转换的方法，底层是调用setter/getter，性能非常好 | 1.5.3 Final |
-|          aspectj           | 提供了一套完整的面向切面编程的框架，编译期织入，比SpringAOP性能要强非常多 |    1.9.5    |
-|          Jackson           |    springboot内置的序列化包，安全性好(fastjson bug比较多)    |  绑定boot   |
-| spring-boot-starter-quartz |                         定时任务框架                         |   2.6.11    |
-|  spring-boot-starter-mail  |                         发送邮件框架                         |   2.6.11    |
+|                  技术                  |                             说明                             |   版本号    |
+| :------------------------------------: | :----------------------------------------------------------: | :---------: |
+|               springboot               |      Java的web开发框架，通过注解的形式简化了繁琐的配置       |   2.6.11    |
+|             spring-securiy             |       一个功能强大且高度可定制的身份验证和访问控制框架       |   2.6.11    |
+|                 lombok                 | 通过注解的形式自动生成构造器、getter/setter、equals、toString等方法，简化开发 |   1.18.24   |
+|              mybatis-plus              | mybatis的增强版，内置了分页插件，同时编译期生成了一些简单的单表操作方法 |    3.4.2    |
+|                 druid                  | 阿里巴巴开源的数据库连接池项目，功能强大，性能优秀，是Java语言最好的数据库连接池之一 |   1.1.23    |
+|                  jjwt                  | 用于生成jwt保存用户登录状态，前端每次将其放在请求头里供后端校验 |    0.9.0    |
+|             commons-pool2              | springboot使用lettuce作为Redis客户端开启连接池需要依赖commons-pool2 |   2.11.1    |
+|               Mapstruct                | Java对象映射转换框架，编译期生成两个对象转换的方法，底层是调用setter/getter，性能非常好 | 1.5.3 Final |
+|                aspectj                 | 提供了一套完整的面向切面编程的框架，编译期织入，比SpringAOP性能要强非常多 |    1.9.5    |
+|                Jackson                 |    springboot内置的序列化包，安全性好(fastjson bug比较多)    |  绑定boot   |
+|       spring-boot-starter-quartz       |                         定时任务框架                         |   2.6.11    |
+|        spring-boot-starter-mail        |                         发送邮件框架                         |   2.6.11    |
+| spring-boot-starter-data-elasticsearch |        elasticsearch的Java Clinet的springboot整合版本        |   2.6.11    |
 
 
 
@@ -39,12 +46,13 @@
 
 ### 1.运行环境
 
-| 应用名称 |  版本  |                           下载地址                           |
-| :------: | :----: | :----------------------------------------------------------: |
-|  Redis   | 6.2.7  |    [https://redis.io/download](https://redis.io/download)    |
-| MongoDB  | 4.4.17 | [https://www.mongodb.com/download-center](https://www.mongodb.com/download-center) |
-|  Mysql   | 8.0.28 |       [https://www.mysql.com/](https://www.mysql.com/)       |
-|   JDK    |  1.8   | [https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
+|   应用名称    |  版本  |                           下载地址                           |
+| :-----------: | :----: | :----------------------------------------------------------: |
+|     Redis     | 6.2.7  |    [https://redis.io/download](https://redis.io/download)    |
+|    MongoDB    | 4.4.17 | [https://www.mongodb.com/download-center](https://www.mongodb.com/download-center) |
+|     Mysql     | 8.0.28 |       [https://www.mysql.com/](https://www.mysql.com/)       |
+|      JDK      |  1.8   | [https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html](https://www.oracle.com/technetwork/java/javase/downloads/jdk8-downloads-2133151.html) |
+| Elasticsearch | 7.12.1 |   [https://www.elastic.co/cn/](https://www.elastic.co/cn/)   |
 
 
 
@@ -76,6 +84,7 @@ default-encoding: UTF-8`
 * 支持用户发布文章，收藏点赞功能
 * 支持用户个人中心，用户可以修改自己的基本信息以及账号安全管理
 * 支持用户评论文章和关于页面
+* 支持用户进行文章信息搜索
 
 
 ## 项目效果展示图
